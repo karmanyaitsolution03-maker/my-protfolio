@@ -19,6 +19,14 @@ class PortfolioSeeder extends Seeder
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
 
+        /* Clear existing portfolio data first so re-running the seeder can never
+           duplicate rows (skills before categories to respect the foreign key). */
+        Skill::query()->delete();
+        SkillCategory::query()->delete();
+        Experience::query()->delete();
+        Project::query()->delete();
+        Achievement::query()->delete();
+
         /* ---------- skills ---------- */
         $cats = [
             ['name' => 'Backend Development', 'icon' => '⚙️', 'wide' => true, 'position' => 1, 'skills' => [

@@ -18,7 +18,7 @@
   --void:#020308; --deep:#060A14;
   --glass:rgba(255,255,255,.04);
   --line:rgba(120,160,255,.14); --line-hot:rgba(120,200,255,.42);
-  --text:#E9EEFB; --muted:#8C97B4; --faint:#4E586F;
+  --text:#F4F7FF; --muted:#B5BED6; --faint:#78839D;
   --cyan:#3DE8FF; --blue:#4D7CFE; --violet:#9D6BFF;
   --gold:#FFC56E; --green:#54F0A8; --rose:#FF6B9D;
   --grad:linear-gradient(105deg,#3DE8FF,#4D7CFE 45%,#9D6BFF);
@@ -100,6 +100,8 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 @keyframes basePulse{50%{opacity:.5;transform:translateX(-50%) scaleX(.85)}}
 .scan-ring{position:absolute;left:50%;top:50%;width:135%;aspect-ratio:1;transform:translate(-50%,-50%);
   border:1.5px solid rgba(61,232,255,.35);border-radius:50%;opacity:0;pointer-events:none}
+.talk-burst{position:absolute;left:50%;top:42%;width:86%;aspect-ratio:1;transform:translate(-50%,-50%) scale(.74);
+  border-radius:50%;border:1px solid rgba(61,232,255,.28);opacity:0;pointer-events:none}
 .eye2{animation:blink2 4.4s infinite}
 @keyframes blink2{0%,93%,100%{transform:scaleY(1)}95%,97%{transform:scaleY(.08)}}
 .console{width:min(640px,90vw);min-height:112px;border:1px solid var(--line-hot);border-radius:16px;
@@ -130,15 +132,37 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   border:2px solid var(--cyan);border-radius:50%;transform:translate(-50%,-50%);opacity:0;
   box-shadow:0 0 40px rgba(61,232,255,.6),inset 0 0 30px rgba(61,232,255,.3)}
 #flash{position:absolute;inset:0;z-index:7;background:radial-gradient(circle at 50% 55%, #CFF6FF, #3DE8FF 40%, transparent 75%);opacity:0;pointer-events:none}
-#enterGate{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle at 50% 38%,#0a1426,#02030a 72%)}
-.eg-box{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px}
+#enterGate{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;text-align:center;background:
+  radial-gradient(circle at 50% 38%,rgba(14,30,56,.96),rgba(2,3,10,.98) 72%),
+  linear-gradient(135deg,rgba(61,232,255,.08),transparent 42%,rgba(157,107,255,.08));
+  overflow:hidden}
+.eg-bg{position:absolute;inset:0;pointer-events:none;opacity:.9}
+.eg-bg:before{content:"RISHABH PAREKH";position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);
+  font-family:var(--display);font-size:clamp(58px,14vw,178px);font-weight:700;letter-spacing:.08em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px rgba(120,200,255,.11);text-shadow:0 0 70px rgba(61,232,255,.08)}
+.eg-bg:after{content:"";position:absolute;inset:0;background:
+  linear-gradient(rgba(61,232,255,.09) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(61,232,255,.07) 1px,transparent 1px);
+  background-size:72px 72px;mask-image:radial-gradient(circle at 50% 45%,#000 0 44%,transparent 76%);
+  animation:egGrid 10s linear infinite}
+.eg-card{position:absolute;min-width:168px;padding:13px 15px;border:1px solid rgba(120,200,255,.24);border-radius:10px;
+  background:rgba(5,10,22,.54);box-shadow:0 18px 48px rgba(0,0,0,.28),0 0 30px rgba(61,232,255,.08);
+  font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--muted);text-align:left;backdrop-filter:blur(10px);
+  animation:egFloat 7s ease-in-out infinite}
+.eg-card b{display:block;color:var(--cyan);font-size:11px;margin-bottom:4px}
+.eg-card small{display:block;color:var(--faint);font-size:8.5px;letter-spacing:.16em;margin-top:3px}
+.eg-card.c1{left:8%;top:18%}.eg-card.c2{right:9%;top:22%;animation-delay:-1.4s}.eg-card.c3{left:12%;bottom:18%;animation-delay:-2.6s}.eg-card.c4{right:12%;bottom:16%;animation-delay:-3.8s}
+@keyframes egGrid{to{background-position:0 72px,72px 0}}
+@keyframes egFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+.eg-box{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px}
 .eg-ring{width:74px;height:74px;border-radius:50%;border:2px solid var(--cyan);border-top-color:transparent;animation:egspin 1.1s linear infinite;opacity:.45;margin-bottom:8px}
 @keyframes egspin{to{transform:rotate(360deg)}}
-.eg-title{font-family:var(--display,sans-serif);font-weight:700;font-size:clamp(34px,7vw,66px);letter-spacing:.1em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-.eg-sub{font-family:var(--mono);font-size:11.5px;letter-spacing:.42em;color:var(--muted)}
-#enterBtn{margin-top:20px;font-family:var(--mono);font-size:14px;letter-spacing:.18em;color:#03101A;background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:999px;padding:14px 32px;cursor:pointer;box-shadow:0 0 32px rgba(61,232,255,.4);transition:.2s}
+.eg-title{font-family:var(--display,sans-serif);font-weight:700;font-size:clamp(38px,7.2vw,76px);letter-spacing:.06em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 50px rgba(61,232,255,.18)}
+.eg-sub{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--text);text-transform:uppercase}
+.eg-copy{max-width:520px;color:var(--muted);font-size:15px;line-height:1.65;margin-top:2px}
+#enterBtn{margin-top:18px;font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.08em;color:#03101A;background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:999px;padding:15px 34px;cursor:pointer;box-shadow:0 0 32px rgba(61,232,255,.4);transition:.2s}
 #enterBtn:hover{transform:translateY(-2px) scale(1.03);filter:brightness(1.06)}
-.eg-hint{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;color:var(--faint);margin-top:8px}
+.eg-hint{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin-top:8px}
 #skipIntro{position:absolute;z-index:8;right:22px;bottom:20px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--faint);padding:10px 18px;border:1px solid var(--line);border-radius:999px;transition:.3s;background:rgba(2,3,8,.5)}
 #skipIntro:hover{color:var(--text);border-color:var(--line-hot)}
 #voiceToggle{position:fixed;z-index:6000;left:18px;bottom:18px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--cyan);padding:9px 14px;border:1px solid var(--line);border-radius:999px;transition:.3s;background:rgba(2,3,8,.55);backdrop-filter:blur(6px);cursor:pointer;display:flex;align-items:center;gap:7px}
@@ -176,7 +200,7 @@ main{position:relative;z-index:2}
 .sec-head{margin-bottom:clamp(40px,6vh,64px)}
 .sec-tag{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.3em;color:var(--cyan);margin-bottom:18px}
 .sec-tag:before{content:"";width:34px;height:1px;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
-.sec-title{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.4vw,62px);line-height:1.04;letter-spacing:-.03em}
+.sec-title{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.4vw,62px);line-height:1.04;letter-spacing:0}
 .sec-title .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .sec-sub{color:var(--muted);max-width:560px;margin-top:16px;font-size:clamp(14.5px,1.5vw,17px)}
 [data-reveal]{opacity:0;transform:translateY(40px)}
@@ -195,9 +219,22 @@ main{position:relative;z-index:2}
 .c-br{bottom:8px;right:8px;border-width:0 1.5px 1.5px 0}
 
 /* hero */
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-top:120px}
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-top:120px;overflow:hidden}
+.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(circle at 18% 28%,rgba(84,240,168,.12),transparent 27%),
+  radial-gradient(circle at 82% 30%,rgba(157,107,255,.13),transparent 29%),
+  linear-gradient(115deg,transparent 0 37%,rgba(61,232,255,.06) 38% 39%,transparent 40% 100%)}
+.project-backdrop{position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.72}
+.project-backdrop:before{content:"RISHABH PAREKH";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);
+  font-family:var(--display);font-size:clamp(70px,16vw,210px);font-weight:700;letter-spacing:.06em;line-height:.85;white-space:nowrap;
+  color:rgba(255,255,255,.025);-webkit-text-stroke:1px rgba(61,232,255,.09)}
+.pb-tile{position:absolute;width:190px;padding:13px 14px;border:1px solid rgba(120,200,255,.18);border-radius:10px;
+  background:rgba(6,10,22,.45);backdrop-filter:blur(10px);box-shadow:0 18px 46px rgba(0,0,0,.24);
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);text-align:left}
+.pb-tile b{display:block;color:var(--cyan);font-size:11px;margin-bottom:4px}.pb-tile span{color:var(--green)}
+.pb1{left:5%;top:28%}.pb2{right:6%;top:34%}.pb3{left:9%;bottom:22%}.pb4{right:10%;bottom:20%}
 .hero-coord{font-family:var(--mono);font-size:11.5px;letter-spacing:.3em;color:var(--faint);margin-bottom:26px}
-.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(48px,9.5vw,118px);line-height:.98;letter-spacing:-.035em;text-shadow:0 0 80px rgba(77,124,254,.35)}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(48px,9.5vw,118px);line-height:.98;letter-spacing:0;text-shadow:0 0 80px rgba(77,124,254,.35)}
 .hero h1 .row{display:block;overflow:hidden}
 .hero h1 .row>span{display:inline-block}
 .hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -214,7 +251,7 @@ main{position:relative;z-index:2}
   box-shadow:0 12px 32px rgba(0,0,0,.4),0 0 22px rgba(61,232,255,.1);white-space:nowrap;will-change:transform}
 .holo-chip b{color:var(--cyan);font-weight:500}
 .hc-1{top:22%;left:8%}.hc-2{top:30%;right:7%}.hc-3{bottom:24%;left:12%}.hc-4{bottom:18%;right:10%}
-@media(max-width:900px){.holo-chip{display:none}}
+@media(max-width:900px){.holo-chip,.eg-card,.pb-tile{display:none}.eg-bg:before,.project-backdrop:before{font-size:clamp(52px,18vw,120px);white-space:normal;width:min(92vw,720px)}}
 .hero-scroll{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px;font-family:var(--mono);font-size:10px;letter-spacing:.34em;color:var(--faint)}
 .hero-scroll .beam{width:1px;height:54px;background:linear-gradient(var(--cyan),transparent);position:relative;overflow:hidden}
 .hero-scroll .beam:after{content:"";position:absolute;top:-20px;left:0;width:100%;height:20px;background:var(--cyan);animation:fall 1.8s var(--ease) infinite}
@@ -394,6 +431,18 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
 /* ============================= PHONE (≤560px) ============================= */
 @media(max-width:560px){
   body{font-size:15px}
+  #introStage{justify-content:flex-start;gap:14px;overflow-y:auto;padding:42px 18px 104px}
+  #holoWrap{width:min(190px,58vw)}
+  .console{width:100%;padding:16px 18px;border-radius:14px;overflow:hidden}
+  .console-tag{align-items:flex-start;font-size:8.5px;letter-spacing:.28em;line-height:1.55}
+  #sayPrev{font-size:10px;max-height:52px}
+  #sayNow{font-size:15px;line-height:1.5;min-height:2.4em}
+  .diag{width:100%;gap:8px;font-size:9.2px;letter-spacing:.08em;padding-bottom:4px}
+  .diag .d{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px 12px;line-height:1.45}
+  .diag .d span{min-width:0;overflow-wrap:anywhere;text-align:left}
+  .diag .d b{text-align:right;font-size:9px;letter-spacing:.08em}
+  #voiceToggle{left:18px;bottom:16px;padding:10px 14px;font-size:10px;letter-spacing:.12em;z-index:6100}
+  #skipIntro{position:fixed;right:18px;bottom:16px;padding:10px 15px;font-size:10px;letter-spacing:.16em;z-index:6100}
   .module{padding:clamp(70px,12vh,104px) 16px}
   .sec-head{margin-bottom:32px}
   .sec-sub{font-size:14.5px}
@@ -422,7 +471,6 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   .ach-rows{padding:6px 18px 22px;gap:12px}
   .ach{padding:18px 12px}
   /* assistant — keep voice toggle clear of the bot */
-  #voiceToggle{bottom:96px}
   #bubble{max-width:170px}
 }
 
@@ -436,12 +484,19 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
 <!-- ============ INTRO ============ -->
 <div id="intro" role="dialog" aria-label="AI system boot">
   <div id="enterGate">
+    <div class="eg-bg" aria-hidden="true">
+      <div class="eg-card c1"><b>KiviCare</b>Healthcare platform<small>Laravel API / MySQL</small></div>
+      <div class="eg-card c2"><b>Streamit</b>OTT backend<small>Subscriptions / Catalog</small></div>
+      <div class="eg-card c3"><b>Bizinvoice</b>Invoice engine<small>Tax rules / PDF</small></div>
+      <div class="eg-card c4"><b>Handyman</b>Service booking<small>REST flows / Status</small></div>
+    </div>
     <div class="eg-box">
       <div class="eg-ring" aria-hidden="true"></div>
-      <div class="eg-title">{{ strtoupper($settings['first_name']) }}</div>
+      <div class="eg-title">{{ strtoupper($settings['name']) }}</div>
       <div class="eg-sub">{{ $settings['footer_brand'] }}</div>
-      <button id="enterBtn">▶ INITIALIZE A.R.I.A.</button>
-      <div class="eg-hint">tap to boot — with voice</div>
+      <p class="eg-copy">Start the portfolio intro. The assistant will briefly introduce the work, skills, and project highlights.</p>
+      <button id="enterBtn">START INTRO</button>
+      <div class="eg-hint">Voice is optional. Use Skip Intro to open the portfolio directly.</div>
     </div>
   </div>
   <canvas id="warp" aria-hidden="true"></canvas>
@@ -465,7 +520,12 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
             <circle class="eye2 eye-l" cx="42" cy="44" r="4.6" fill="#3DE8FF"/>
             <circle class="eye2 eye-r" cx="58" cy="44" r="4.6" fill="#3DE8FF"/>
           </g>
-          <path d="M44 53 Q50 58 56 53" stroke="#3DE8FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path id="holoSmile" d="M44 53 Q50 58 56 53" stroke="#3DE8FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <ellipse id="holoMouth" cx="50" cy="54" rx="5.8" ry="0.6" fill="#3DE8FF" opacity="0"/>
+          <g id="holoCheeks" opacity="0">
+            <circle cx="36" cy="51" r="2.3" fill="#9D6BFF"/>
+            <circle cx="64" cy="51" r="2.3" fill="#9D6BFF"/>
+          </g>
           <rect x="34" y="76" width="32" height="26" rx="12" fill="rgba(13,26,52,.55)" stroke="#3DE8FF" stroke-width="1.8"/>
           <rect x="44" y="83" width="12" height="8" rx="3" fill="#9D6BFF" opacity=".9"/>
           <g id="holoArm" style="transform-origin:33px 83px">
@@ -478,6 +538,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
       </svg>
       <div class="scanlines"></div>
       <div class="holo-base"></div>
+      <div class="talk-burst" id="talkBurst"></div>
       <div class="scan-ring" id="scanRing"></div>
     </div>
     <div class="console" id="console" aria-live="polite">
@@ -489,7 +550,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   </div>
 
   <div id="flash" aria-hidden="true"></div>
-  <button id="skipIntro">SKIP INTRO →</button>
+  <button id="skipIntro">SKIP INTRO</button>
 </div>
 
 <canvas id="net" aria-hidden="true"></canvas>
@@ -523,6 +584,12 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
 
 <!-- MODULE 00 — COMMAND DECK (hero) -->
 <section class="module hero" id="deck" aria-label="Command deck">
+  <div class="project-backdrop" aria-hidden="true">
+    <div class="pb-tile pb1"><b>API Layer</b>Auth / RBAC / REST<br><span>200 OK</span> production flow</div>
+    <div class="pb-tile pb2"><b>Database</b>MySQL / MongoDB<br><span>indexed</span> reliable queries</div>
+    <div class="pb-tile pb3"><b>Projects</b>KiviCare / Streamit<br><span>live</span> backend systems</div>
+    <div class="pb-tile pb4"><b>Support</b>Debug / deploy / deliver<br><span>stable</span> releases</div>
+  </div>
   <div class="hero-coord" data-reveal>{{ $settings['hero_coord'] }}</div>
   <h1 aria-label="{{ $settings['name'] }}">
     <span class="row"><span data-hline>{{ strtoupper($settings['first_name']) }}</span></span>
@@ -853,12 +920,93 @@ const warpCv=document.getElementById('warp');
 let introDone=false, introTimers=[];
 function later(fn,ms){const t=setTimeout(()=>{if(!introDone)fn();},ms);introTimers.push(t);return t;}
 
+/* ---------- ROBOT SOUND (Web Audio synth) ----------
+   Synthesised sci-fi chatter that plays UNDER the spoken line. Unlike the
+   speech engine — which Chrome silently drops when invoked a few seconds
+   after the last gesture, and which is mute on machines with no TTS voice —
+   Web Audio keeps working once unlocked, so the bot is always audibly "alive". */
+const RobotSfx=(function(){
+  let ctx=null,master=null,chatterTimer=null,currentGen=0;
+  function ensure(){
+    if(ctx)return ctx;
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC)return null;
+      ctx=new AC();
+      master=ctx.createGain();master.gain.value=.9;master.connect(ctx.destination);
+    }catch(e){ctx=null;}
+    return ctx;
+  }
+  function unlock(){ensure();if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}
+  // one short robotic blip ("phoneme") starting at time t
+  function blip(t,freq,dur){
+    const o=ctx.createOscillator(),g=ctx.createGain(),f=ctx.createBiquadFilter();
+    o.type=Math.random()<.5?'square':'sawtooth';
+    o.frequency.setValueAtTime(freq,t);
+    o.frequency.linearRampToValueAtTime(freq*(.8+Math.random()*.5),t+dur);
+    f.type='bandpass';f.frequency.value=freq*2.2;f.Q.value=7;
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(.05,t+.012);
+    g.gain.exponentialRampToValueAtTime(.0005,t+dur);
+    o.connect(f);f.connect(g);g.connect(master);
+    o.start(t);o.stop(t+dur+.03);
+  }
+  // deep, male-leaning robot range
+  const BANK=[150,138,168,128,180,144];
+  function startChatter(){
+    if(!ensure())return null;
+    if(ctx.state==='suspended')ctx.resume().catch(()=>{});
+    if(chatterTimer){clearTimeout(chatterTimer);chatterTimer=null;}
+    const my=++currentGen;
+    (function loop(){
+      if(my!==currentGen)return;            // superseded by a newer line
+      const now=ctx.currentTime,n=2+Math.floor(Math.random()*3);
+      let t=now;
+      for(let i=0;i<n;i++){
+        const fr=BANK[Math.floor(Math.random()*BANK.length)]*(.9+Math.random()*.45);
+        const d=.05+Math.random()*.06;
+        blip(t,fr,d);t+=d+.02+Math.random()*.03;
+      }
+      chatterTimer=setTimeout(loop,(t-now)*1000+110+Math.random()*170);
+    })();
+    return my;
+  }
+  function stopChatter(gen){
+    if(gen!=null&&gen!==currentGen)return;   // stale stop from a previous line — ignore
+    currentGen++;                            // halts any running loop on its next tick
+    if(chatterTimer){clearTimeout(chatterTimer);chatterTimer=null;}
+  }
+  return {unlock,startChatter,stopChatter};
+})();
+
+/* ---------- meSpeak — eSpeak compiled to JS: a TRUE robotic voice that
+   runs 100% in the browser (no server/API), works on dynamic text, and
+   sounds the same on every machine (unlike the OS Web-Speech voices). ---------- */
+const MESPEAK_BASE='https://cdn.jsdelivr.net/npm/mespeak@1.9.6/';   // browser-global build (exposes window.meSpeak)
+let meSpeakReady=false;
+(function loadMeSpeak(){
+  const s=document.createElement('script');
+  s.src=MESPEAK_BASE+'mespeak.min.js';
+  s.onload=function(){
+    try{
+      meSpeak.loadConfig(MESPEAK_BASE+'mespeak_config.json');
+      meSpeak.loadVoice(MESPEAK_BASE+'voices/en/en-us.json',function(ok){meSpeakReady=!!ok;});
+    }catch(e){meSpeakReady=false;}
+  };
+  s.onerror=function(){meSpeakReady=false;};   // CDN blocked → fall back to Web Speech API
+  document.head.appendChild(s);
+})();
+function meSpeakAvailable(){return meSpeakReady&&typeof window.meSpeak!=='undefined'&&meSpeak.isVoiceLoaded&&meSpeak.isVoiceLoaded();}
+// Prime meSpeak's audio inside a user gesture so it can play later (Chrome autoplay).
+function meSpeakPrime(){if(meSpeakAvailable()){try{meSpeak.speak(' ',{amplitude:0});}catch(e){}}}
+
 /* ---------- VOICE NARRATION (Web Speech API) ---------- */
 const canSpeak=('speechSynthesis' in window);
 const VOICE_LANG=@json($settings['intro_voice_lang'] ?: 'en-US');
 const VOICE_GENDER=@json(strtolower($settings['intro_voice_gender'] ?: 'male'));
 const VOICE_NAME=@json($settings['intro_voice_name'] ?? '');
-let voiceOn=canSpeak && {{ ($settings['intro_voice'] ?? '1') !== '0' && $settings['intro_voice'] !== '' ? 'true' : 'false' }};
+// voice is wanted purely from the setting — meSpeak can speak even when the OS has no Web-Speech voice
+let voiceOn={{ ($settings['intro_voice'] ?? '1') !== '0' && $settings['intro_voice'] !== '' ? 'true' : 'false' }};
 let pickedVoice=null;
 // Heuristic gender match by voice name (the API doesn't expose gender directly).
 const MALE_RE=/\b(male|david|mark|guy|george|daniel|alex|fred|james|john|paul|ravi|rishi|prabhat|hemant|man)\b/i;
@@ -903,7 +1051,28 @@ function paintVoiceBtn(){
 }
 function speak(text,opts){
   opts=opts||{};
-  if(!voiceOn||!canSpeak||!text){opts.onend&&opts.onend();return;}
+  if(!voiceOn||!text){opts.onend&&opts.onend();return;}
+  // ---- preferred path: meSpeak (real robotic eSpeak voice) ----
+  if(meSpeakAvailable()){
+    try{
+      meSpeak.stop();                                   // cut off any line still talking
+      if(canSpeak){try{speechSynthesis.cancel();}catch(e){}}
+      const male=(VOICE_GENDER!=='female');
+      // low pitch + slightly slow = that classic deep robot delivery
+      const o={amplitude:100,volume:1,pitch:male?22:60,speed:165,wordgap:1};
+      vBtn&&vBtn.classList.add('speaking');
+      let done=false;
+      const finish=()=>{if(done)return;done=true;vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
+      meSpeak.speak(text,o,function(){finish();});       // callback fires when playback ends
+      return;
+    }catch(e){/* fall through to Web Speech */}
+  }
+  if(!canSpeak){
+    // neither meSpeak (still loading) nor Web Speech — keep the robot audible with chatter
+    const c=RobotSfx.startChatter();
+    setTimeout(()=>{RobotSfx.stopChatter(c);opts.onend&&opts.onend();},Math.min(9000,text.length*70+700));
+    return;
+  }
   try{
     if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
     if(speechSynthesis.paused){try{speechSynthesis.resume();}catch(e){}}
@@ -915,10 +1084,13 @@ function speak(text,opts){
     if(opts.bot||opts.intro){u.rate=1.02;u.pitch=malePitch?0.85:1.6;}   // male keeps it deep; female stays chirpy
     else{u.rate=1;u.pitch=basePitch;}
     u.volume=1;
+    // robotic sound layer — start NOW (don't wait for onstart, which Chrome may skip)
+    const chatter=RobotSfx.startChatter();
+    const stopBackstop=setTimeout(()=>RobotSfx.stopChatter(chatter),Math.min(15000,text.length*120+2500));
     u.onstart=()=>vBtn&&vBtn.classList.add('speaking');
-    u.onend=u.onerror=()=>{vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
+    u.onend=u.onerror=()=>{clearTimeout(stopBackstop);RobotSfx.stopChatter(chatter);vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
     speechSynthesis.speak(u);
-  }catch(e){}
+  }catch(e){RobotSfx.stopChatter();opts.onend&&opts.onend();}
 }
 /* ---- robot talking mouth (visual, runs whenever the bot says something) ---- */
 let botMouthTl=null;
@@ -945,7 +1117,42 @@ function botMouthStop(){
   if(hasGSAP&&!reduced){gsap.to(m,{opacity:0,attr:{ry:0.5},duration:.15});gsap.to(s,{opacity:1,duration:.25,delay:.05});}
   else{m.setAttribute('opacity','0');if(s)s.setAttribute('opacity','1');}
 }
-function stopSpeak(){if(canSpeak){try{speechSynthesis.cancel();}catch(e){}}vBtn&&vBtn.classList.remove('speaking');}
+/* ---- intro hologram "talking" action (pulses while A.R.I.A. narrates) ---- */
+let holoTalkTl=null;
+function holoTalkStart(){
+  if(!hasGSAP||reduced)return;
+  holoTalkStop();
+  gsap.set('#holoMouth',{opacity:1,attr:{rx:5.8,ry:.8}});
+  gsap.to('#holoSmile',{opacity:0,duration:.08});
+  gsap.to('#holoCheeks',{opacity:.5,duration:.12});
+  gsap.to('#talkBurst',{opacity:.55,scale:1.06,duration:.35,yoyo:true,repeat:-1,ease:'sine.inOut'});
+  gsap.to('#holoArm',{rotate:-20,duration:.28,yoyo:true,repeat:-1,ease:'sine.inOut',transformOrigin:'33px 83px'});
+  gsap.to('#holoPupils circle',{attr:{r:5.4},duration:.18,yoyo:true,repeat:-1,ease:'sine.inOut'});
+  gsap.to('#holo circle:first-of-type',{attr:{r:4.4},duration:.22,yoyo:true,repeat:-1,ease:'sine.inOut'});
+  holoTalkTl=gsap.timeline({repeat:-1,defaults:{ease:'sine.inOut'}});
+  holoTalkTl.to('#holo',{scale:1.03,duration:.12,transformOrigin:'50% 50%'},0)
+            .to('#holoMouth',{attr:{rx:7.2,ry:4.6},duration:.09},0)
+            .to('#holoMouth',{attr:{rx:4.8,ry:1.2},duration:.08})
+            .to('#holo',{scale:1.01,duration:.08},'<')
+            .to('#holoMouth',{attr:{rx:6.4,ry:3.4},duration:.1})
+            .to('#holoMouth',{attr:{rx:5.2,ry:.9},duration:.09})
+            .to('#holo',{scale:1.025,duration:.1},'<');
+}
+function holoTalkStop(){
+  if(holoTalkTl){holoTalkTl.kill();holoTalkTl=null;}
+  if(hasGSAP&&!reduced){
+    gsap.killTweensOf(['#holoPupils circle','#holoMouth','#holoSmile','#holoCheeks','#talkBurst','#holoArm','#holo circle:first-of-type']);
+    gsap.to('#holo',{scale:1,duration:.25,transformOrigin:'50% 50%'});
+    gsap.to('#holoPupils circle',{attr:{r:4.6},duration:.25});
+    gsap.to('#holoMouth',{opacity:0,attr:{rx:5.8,ry:.6},duration:.12});
+    gsap.to('#holoSmile',{opacity:1,duration:.18});
+    gsap.to('#holoCheeks',{opacity:0,duration:.18});
+    gsap.to('#talkBurst',{opacity:0,scale:.74,duration:.18});
+    gsap.to('#holoArm',{rotate:0,duration:.25,transformOrigin:'33px 83px'});
+    gsap.to('#holo circle:first-of-type',{attr:{r:3.2},duration:.2});
+  }
+}
+function stopSpeak(){if(meSpeakAvailable()){try{meSpeak.stop();}catch(e){}}if(canSpeak){try{speechSynthesis.cancel();}catch(e){}}RobotSfx.stopChatter();holoTalkStop();vBtn&&vBtn.classList.remove('speaking');}
 /* Browsers block speech until the FIRST user gesture. A plain resume() isn't
    enough — we must call speak() inside a gesture once. So on the first tap /
    click / key we fire a silent utterance to unlock the engine; after that the
@@ -954,6 +1161,7 @@ if(canSpeak){
   let audioPrimed=false;
   const primeAudio=()=>{
     if(audioPrimed)return; audioPrimed=true;
+    RobotSfx.unlock();meSpeakPrime();
     try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}
   };
   ['pointerdown','keydown','touchstart','click'].forEach(ev=>addEventListener(ev,primeAudio,{passive:true}));
@@ -961,7 +1169,7 @@ if(canSpeak){
   addEventListener('scroll',()=>{try{if(speechSynthesis.paused)speechSynthesis.resume();}catch(e){}},{passive:true});
 }
 if(vBtn){
-  if(!canSpeak)vBtn.style.display='none';
+  // keep the toggle — meSpeak (robot voice) works even when the OS has no Web-Speech voice
   paintVoiceBtn();
   vBtn.addEventListener('click',()=>{
     voiceOn=!voiceOn;paintVoiceBtn();
@@ -980,23 +1188,23 @@ if(vBtn){
 
   // Boot sequence — record counts are pulled live from the database.
   $bootLines = [
-    ['SYSTEM BOOTING', '<em>...</em>'],
-    ['INITIALIZING COMMAND CENTER', '<em>OK</em>'],
-    ['SCANNING ENGINEER PROFILE', '<em>FOUND</em>'],
-    ['LOADING EXPERIENCE DATABASE', '<em>' . $expCount . ' ' . \Illuminate\Support\Str::plural('RECORD', $expCount) . '</em>'],
-    ['VERIFYING PROJECT RECORDS', '<em>' . $projCount . ' VERIFIED</em>'],
-    ['AI ACTIVATION', '<em>SUCCESSFUL</em>'],
+    ['STARTING PORTFOLIO', '<em>OK</em>'],
+    ['LOADING PROFILE SUMMARY', '<em>READY</em>'],
+    ['CHECKING BACKEND SKILLS', '<em>READY</em>'],
+    ['LOADING EXPERIENCE', '<em>' . $expCount . ' ' . \Illuminate\Support\Str::plural('RECORD', $expCount) . '</em>'],
+    ['CHECKING PROJECTS', '<em>' . $projCount . ' READY</em>'],
+    ['OPENING INTRO', '<em>DONE</em>'],
   ];
 
   // Spoken narration lines — fall back to defaults when the setting is empty.
   $greetings = array_values(array_filter(array_map('trim', [
     $settings['intro_greeting_1'] ?? 'Hello, Visitor.',
-    $settings['intro_greeting_2'] ?? 'Welcome to Command Center.',
+    $settings['intro_greeting_2'] ?? 'Welcome to the portfolio.',
   ])));
-  $introGuide     = $settings['intro_guide']     ?? 'I am your AI guide.';
-  $introPitch     = $settings['intro_pitch']     ?? 'Today I will introduce a software engineer who transforms complex challenges into scalable digital solutions.';
-  $introValidated = $settings['intro_validated'] ?? 'Profile validation completed.';
-  $introWelcome   = $settings['intro_welcome']   ?? 'Please welcome…';
+  $introGuide     = $settings['intro_guide']     ?? 'I will guide you through the highlights.';
+  $introPitch     = $settings['intro_pitch']     ?? 'This portfolio presents backend experience, technical skills, production projects, and ways to connect.';
+  $introValidated = $settings['intro_validated'] ?? 'Profile overview ready.';
+  $introWelcome   = $settings['intro_welcome']   ?? 'Opening portfolio.';
 
   // Diagnostics — one per line, format "LABEL | RESULT". Put a ★ in the result for the gold highlight.
   $diagDefault =
@@ -1015,7 +1223,7 @@ if(vBtn){
   }
   $introScript[] = ['t' => $introGuide, 'wave' => true, 'd' => 1450];
   $introScript[] = ['t' => $introPitch, 'd' => 2100];
-  $introScript[] = ['t' => 'Scanning profile…', 'scan' => true, 'd' => 2300];
+  $introScript[] = ['t' => 'Scanning profile highlights...', 'scan' => true, 'd' => 2300];
   foreach ($diagLines as $line) {
     if (trim($line) === '') continue;
     $parts  = explode('|', $line, 2);
@@ -1026,14 +1234,14 @@ if(vBtn){
       : ['diag' => $label, 'ok' => $result, 'd' => 680];
   }
   $introScript[] = ['t' => $introValidated, 'd' => 1500];
-  $introScript[] = ['t' => 'Preparing introduction…', 'd' => 1500];
+  $introScript[] = ['t' => 'Preparing portfolio...', 'd' => 1500];
   $introScript[] = ['t' => $introWelcome, 'd' => 1200, 'launch' => true];
 @endphp
 const bootLines=@json($bootLines);
 function phaseBoot(){
   bootLines.forEach((l,idx)=>{
     const ln=document.createElement('span');ln.className='ln'+(idx===0||idx===5?' sys':'');
-    ln.innerHTML=`<span>> ${l[0]}…</span><span>${l[1]}</span>`;
+    ln.innerHTML=`<span>> ${l[0]}...</span><span>${l[1]}</span>`;
     bootEl.appendChild(ln);
     gsap.to(ln,{opacity:1,duration:.05,delay:.35+idx*.42});
   });
@@ -1120,14 +1328,15 @@ function phaseDialogue(){
     if(step.scan)visitorScan();
     if(step.wave)gsap.fromTo('#holoArm',{rotate:0},{rotate:-26,duration:.3,yoyo:true,repeat:3,ease:'sine.inOut'});
     let advanced=false;
-    const adv=()=>{if(advanced||introDone)return;advanced=true;if(step.launch)phaseLaunch();else next();};
+    const adv=()=>{if(advanced||introDone)return;advanced=true;holoTalkStop();if(step.launch)phaseLaunch();else next();};
     typeLine(step.t,!!step.html);
-    if(voiceOn&&canSpeak){
-      // advance only after A.R.I.A. finishes speaking the line (so nothing is cut off)
-      speak(step.t,{intro:true,onend:()=>later(adv,420)});
+    holoTalkStart();                        // robot visibly "talks" for every line
+    if(voiceOn){
+      // advance only after the robot finishes speaking the line (so nothing is cut off)
+      speak(step.t,{intro:true,onend:()=>{holoTalkStop();later(adv,420);}});
       later(adv,(step.t.length*95)+6000);   // safety backstop if the voice stalls
     }else{
-      later(adv,step.d);
+      later(()=>{holoTalkStop();adv();},step.d);   // voice disabled — just time the lines
     }
   }
   next();
@@ -1251,12 +1460,15 @@ function removeGate(){
   else enterGate.remove();
 }
 function startBoot(unlock){
-  if(unlock&&canSpeak){try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}}
+  if(unlock){
+    RobotSfx.unlock();meSpeakPrime();
+    if(canSpeak){try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}}
+  }
   removeGate();
   phaseBoot();
 }
 if(reduced||!hasGSAP){ removeGate(); endIntro(true); }
-else if(voiceOn&&canSpeak&&enterBtn){ enterBtn.addEventListener('click',()=>startBoot(true),{once:true}); }
+else if(voiceOn&&enterBtn){ enterBtn.addEventListener('click',()=>startBoot(true),{once:true}); }
 else { removeGate(); startBoot(false); }
 
 function siteIntro(){

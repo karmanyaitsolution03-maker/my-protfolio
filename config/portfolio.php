@@ -22,8 +22,8 @@ return [
         'first_name'     => ['First name', 'Rishabh', 'text'],
         'last_name'      => ['Last name', 'Parekh', 'text'],
         'designation'    => ['Designation', 'Backend Software Engineer', 'text'],
-        'tagline'        => ['Hero tagline (HTML)', 'Building <b>scalable systems, APIs, and digital experiences</b> that power modern products.', 'area'],
-        'frameworks'     => ['Core frameworks', 'Laravel · Symfony', 'text'],
+        'tagline'        => ['Hero tagline (HTML)', 'Backend developer focused on <b>Laravel, Symfony, REST APIs, databases, and production support</b>.', 'area'],
+        'frameworks'     => ['Core frameworks', 'Laravel / Symfony', 'text'],
         'specialization' => ['Specialization', 'API Development', 'text'],
         'years'          => ['Years of experience', '2', 'text'],
         'location'       => ['Location / base', 'Gujarat, India', 'text'],
@@ -39,16 +39,16 @@ return [
     ],
 
     'About (AI assessment)' => [
-        'about_1' => ['About paragraph 1 (HTML)', 'Subject is a <b>backend software engineer</b> with hands-on experience across backend development, <b>API integration, client delivery, project coordination and production support</b>.', 'area'],
-        'about_2' => ['About paragraph 2 (HTML)', 'Demonstrated ability to build <b>scalable applications</b> and maintain <b>reliable systems</b> under real production conditions — including direct client communication, requirement gathering and deployment coordination.', 'area'],
-        'about_3' => ['About paragraph 3 (HTML)', 'Behavioral analysis indicates an unusual calm during production incidents. This trait is rare and valuable.', 'area'],
+        'about_1' => ['About paragraph 1 (HTML)', '<b>Backend Software Engineer</b> with hands-on experience in Laravel, Symfony, REST APIs, database design, client communication, and production support.', 'area'],
+        'about_2' => ['About paragraph 2 (HTML)', 'Comfortable turning requirements into reliable features, debugging live issues, coordinating deployments, and keeping projects moving with clear communication.', 'area'],
+        'about_3' => ['About paragraph 3 (HTML)', 'Focused on clean backend logic, practical architecture, and dependable delivery for real business products.', 'area'],
     ],
 
     'AI intro — boot screen' => [
         'intro_greeting_1' => ['Greeting line 1', 'Hello, Visitor.', 'text'],
-        'intro_greeting_2' => ['Greeting line 2', 'Welcome to Command Center.', 'text'],
-        'intro_guide'      => ['Guide line (waves)', 'I am your AI guide.', 'text'],
-        'intro_pitch'      => ['Pitch line', 'Today I will introduce a software engineer who transforms complex challenges into scalable digital solutions.', 'area'],
+        'intro_greeting_2' => ['Greeting line 2', 'Welcome to the portfolio.', 'text'],
+        'intro_guide'      => ['Guide line (waves)', 'I will guide you through the highlights.', 'text'],
+        'intro_pitch'      => ['Pitch line', 'This portfolio presents backend experience, technical skills, production projects, and ways to connect.', 'area'],
         'intro_diagnostics'=> ['Diagnostics — one per line "LABEL | RESULT" (★ in result = gold)',
             "BACKEND ENGINEERING EXPERTISE | DETECTED ✓\n"
             . "API DEVELOPMENT EXPERTISE | DETECTED ✓\n"
@@ -56,8 +56,8 @@ return [
             . "PROJECT DELIVERY EXPERIENCE | VERIFIED ✓\n"
             . "PROBLEM SOLVING CAPABILITIES | CONFIRMED ✓\n"
             . "PROFESSIONAL RELIABILITY SCORE | EXCEPTIONAL ★", 'area'],
-        'intro_validated'  => ['Validation line', 'Profile validation completed.', 'text'],
-        'intro_welcome'    => ['Welcome / launch line', 'Please welcome…', 'text'],
+        'intro_validated'  => ['Validation line', 'Profile overview ready.', 'text'],
+        'intro_welcome'    => ['Welcome / launch line', 'Please welcome :name.', 'text'],
         'intro_voice'       => ['Chat-bot voice — the floating robot speaks aloud (1 = on, 0 = off)', '1', 'text'],
         'intro_voice_lang'  => ['Bot voice language code (e.g. en-US, en-GB, en-IN, hi-IN)', 'en-US', 'text'],
         'intro_voice_gender'=> ['Preferred bot voice (female / male / any)', 'male', 'text'],
@@ -65,31 +65,31 @@ return [
     ],
 
     'Hero / Command Deck' => [
-        'hero_coord'         => ['Coordinate strip', 'AI COMMAND CENTER · SUBJECT FILE 0001 · CLEARANCE: PUBLIC', 'text'],
-        'hero_cta_primary'   => ['Primary button', 'OPEN PROFILE REPORT ↓', 'text'],
-        'hero_cta_secondary' => ['Secondary button', 'ESTABLISH COMMS', 'text'],
+        'hero_coord'         => ['Coordinate strip', 'PORTFOLIO OVERVIEW / BACKEND ENGINEER / AVAILABLE FOR WORK', 'text'],
+        'hero_cta_primary'   => ['Primary button', 'VIEW PROFILE', 'text'],
+        'hero_cta_secondary' => ['Secondary button', 'CONTACT ME', 'text'],
         'hero_scroll'        => ['Scroll hint', 'SCROLL TO EXPLORE', 'text'],
         'hero_chips'         => ['Floating chips — one per line (HTML)',
-            "<b>API</b> /v1/systems · 200 OK · 38ms\n"
-            . "<b>QUEUE</b> 1,284 jobs · processed ✓\n"
-            . "<b>DB</b> mysql://core · 0.003s\n"
-            . "<b>UPTIME</b> 99.9% · nominal", 'area'],
+            "<b>BACKEND</b> Laravel / Symfony\n"
+            . "<b>APIS</b> REST integration and auth\n"
+            . "<b>DATABASE</b> MySQL and MongoDB\n"
+            . "<b>SUPPORT</b> Debugging and deployment", 'area'],
     ],
 
     'Section · Profile' => [
         'profile_tag'          => ['Tag', 'MODULE 01 · AI PROFILE REPORT', 'text'],
-        'profile_title'        => ['Title', 'Subject analysis:', 'text'],
-        'profile_title_hl'     => ['Title highlight', 'complete.', 'text'],
+        'profile_title'        => ['Title', 'Profile overview:', 'text'],
+        'profile_title_hl'     => ['Title highlight', 'backend focused.', 'text'],
         'profile_identity_tag' => ['Identity matrix tag', '// IDENTITY MATRIX — VERIFIED', 'text'],
-        'profile_heading'      => ['Assessment heading', 'A.R.I.A. assessment', 'text'],
-        'profile_note'         => ['Report footer note (HTML)', 'ANALYSIS CONFIDENCE: <b>99.7%</b> · FALSE-POSITIVE PROBABILITY: NEGLIGIBLE · REPORT GENERATED BY A.R.I.A.', 'area'],
+        'profile_heading'      => ['Assessment heading', 'Professional summary', 'text'],
+        'profile_note'         => ['Report footer note (HTML)', 'CORE STRENGTHS: <b>APIS</b> / BACKEND LOGIC / DATABASES / PRODUCTION SUPPORT', 'area'],
     ],
 
     'Section · Skills' => [
         'skills_tag'      => ['Tag', 'MODULE 02 · ACTIVE SKILL MODULES', 'text'],
-        'skills_title'    => ['Title', 'Five modules.', 'text'],
-        'skills_title_hl' => ['Title highlight', 'All systems active.', 'text'],
-        'skills_sub'      => ['Subtitle', 'Energy levels reflect real production mileage — neural links show how the modules work as one system.', 'area'],
+        'skills_title'    => ['Title', 'Technical skills.', 'text'],
+        'skills_title_hl' => ['Title highlight', 'Production ready.', 'text'],
+        'skills_sub'      => ['Subtitle', 'A practical backend toolkit covering APIs, databases, frameworks, communication, and project delivery.', 'area'],
     ],
 
     'Section · Experience' => [
@@ -100,9 +100,9 @@ return [
 
     'Section · Projects' => [
         'projects_tag'      => ['Tag', 'MODULE 04 · PROJECT COMMAND CENTER', 'text'],
-        'projects_title'    => ['Title', 'Five systems.', 'text'],
-        'projects_title_hl' => ['Title highlight', 'All running in production.', 'text'],
-        'projects_sub'      => ['Subtitle (:name = your name)', 'Live architecture feeds below — watch the data flow through each system :name built.', 'area'],
+        'projects_title'    => ['Title', 'Selected projects.', 'text'],
+        'projects_title_hl' => ['Title highlight', 'Built for real users.', 'text'],
+        'projects_sub'      => ['Subtitle (:name = your name)', 'A quick look at the platforms, APIs, and backend flows :name has worked on.', 'area'],
     ],
 
     'Section · Achievements' => [
@@ -115,8 +115,8 @@ return [
         'contact_tag'           => ['Tag', 'MODULE 06 · CONTACT COMMAND CENTER', 'text'],
         'contact_title'         => ['Title', 'Open a channel.', 'text'],
         'contact_title_hl'      => ['Title highlight', 'The system is listening.', 'text'],
-        'contact_heading'       => ['Left heading', 'Transmit your brief.', 'text'],
-        'contact_text'          => ['Left paragraph', 'New API, Laravel product, Symfony service, or a production system that needs a steady pair of hands — send coordinates.', 'area'],
+        'contact_heading'       => ['Left heading', 'Let us work together.', 'text'],
+        'contact_text'          => ['Left paragraph', 'For Laravel, Symfony, API, backend, or production support work, send a message with the project details.', 'area'],
         'contact_ai_1'          => ['AI line 1', 'Communication channels established.', 'text'],
         'contact_ai_2'          => ['AI line 2', 'Awaiting connection request…', 'text'],
         'contact_label_name'    => ['Form label — name', 'CALLSIGN / NAME', 'text'],

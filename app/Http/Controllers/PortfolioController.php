@@ -7,7 +7,8 @@ use App\Models\Experience;
 use App\Models\Project;
 use App\Models\Setting;
 use App\Models\SkillCategory;
-use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Response;
 
 class PortfolioController extends Controller
 {
@@ -78,6 +79,13 @@ class PortfolioController extends Controller
     {
         $settings = Setting::resolved();
         $name = trim(($settings['first_name'] ?? 'Rishabh') . ' ' . ($settings['last_name'] ?? 'Parekh'));
+
+        if (!empty($settings['resume_file']) && Storage::disk('public')->exists($settings['resume_file'])) {
+            return response()->download(
+                Storage::disk('public')->path($settings['resume_file']),
+                str_replace(' ', '_', $name) . '_Resume.pdf'
+            );
+        }
 
         $lines = ["=== SUBJECT FILE: " . strtoupper($name) . " ===", ''];
         $lines[] = 'DESIGNATION: ' . ($settings['designation'] ?? 'Backend Software Engineer');

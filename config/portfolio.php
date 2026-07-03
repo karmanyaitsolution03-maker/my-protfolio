@@ -27,7 +27,13 @@ return [
         'specialization' => ['Specialization', 'API Development', 'text'],
         'years'          => ['Years of experience', '2', 'text'],
         'location'       => ['Location / base', 'Gujarat, India', 'text'],
-        'status_label'   => ['Status label', 'Open to opportunities', 'text'],
+        'status_label'   => ['Status label', 'Open to opportunities', 'select', [
+            'Open to opportunities',
+            'Open to full-time roles',
+            'Open to freelance work',
+            'Actively interviewing',
+            'Not currently available',
+        ]],
     ],
 
     'Contact details' => [
@@ -125,6 +131,7 @@ return [
         'contact_btn'           => ['Submit button', 'TRANSMIT MESSAGE ▸▸▸', 'text'],
         'contact_btn_sent'      => ['Submit button — sent', '✓ TRANSMISSION RECEIVED', 'text'],
         'resume_label'          => ['Resume link label', 'DOWNLOAD RESUME — SUBJECT_FILE.txt', 'text'],
+        'resume_file'           => ['Resume PDF (upload to let visitors download it)', '', 'file'],
     ],
 
     'Success modal' => [

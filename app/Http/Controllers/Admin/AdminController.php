@@ -153,9 +153,22 @@ class AdminController extends Controller
     public function settingsSave(Request $request)
     {
         $this->gate();
+
+        $request->validate([
+            'settings.resume_file' => 'nullable|file|mimes:pdf|max:10240',
+        ]);
+
         foreach ((array) $request->input('settings', []) as $key => $value) {
             Setting::updateOrCreate(['key' => $key], ['value' => $value]);
         }
+
+        foreach ((array) $request->file('settings', []) as $key => $file) {
+            if ($file && $file->isValid()) {
+                $path = $file->storeAs('resumes', $key . '.' . $file->getClientOriginalExtension(), 'public');
+                Setting::updateOrCreate(['key' => $key], ['value' => $path]);
+            }
+        }
+
         return back()->with('ok', 'Settings saved.');
     }
 

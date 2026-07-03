@@ -104,6 +104,8 @@ textarea{min-height:90px;resize:vertical}
 .stat span{display:block;color:var(--muted);font-size:12px;margin-top:5px;letter-spacing:.03em}
 .actions{white-space:nowrap}
 small.hint{color:var(--muted)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap table{min-width:640px}
 
 /* ---------- responsive ---------- */
 #navtoggle{display:none}

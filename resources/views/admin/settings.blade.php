@@ -59,4 +59,10 @@
     <a class="btn" href="{{ route('home') }}" target="_blank">Preview site ↗</a>
   </div>
 </form>
+
+<form method="POST" action="{{ route('admin.migrate') }}" class="card" style="display:flex;align-items:center;gap:14px" onsubmit="return confirm('Run pending database migrations now?')">
+  @csrf
+  <button class="btn">Run database migrations</button>
+  <small class="hint">Applies any new migration files to the database — use after deploying code changes.</small>
+</form>
 @endsection

@@ -19,6 +19,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
     Route::post('/settings', [AdminController::class, 'settingsSave'])->name('settings.save');
+    Route::post('/migrate', [AdminController::class, 'migrate'])->name('migrate');
     Route::get('/messages', [AdminController::class, 'messages'])->name('messages');
     Route::delete('/messages/{message}', [AdminController::class, 'messageDelete'])->name('messages.delete');
     Route::get('/visitors', [AdminController::class, 'visitors'])->name('visitors');

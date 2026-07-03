@@ -13,6 +13,7 @@ use App\Models\SkillCategory;
 use App\Models\User;
 use App\Models\Visit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -139,8 +140,17 @@ class AdminController extends Controller
         return view('admin.dashboard', [
             'counts'   => $counts,
             'messages' => Message::count(),
-            'visits'   => Visit::count(),
+            'visits'   => Visit::sum('visit_count'),
         ]);
+    }
+
+    public function migrate()
+    {
+        $this->gate();
+
+        Artisan::call('migrate', ['--force' => true]);
+
+        return back()->with('ok', trim(Artisan::output()) ?: 'Migrations are already up to date.');
     }
 
     public function settings()
@@ -191,10 +201,10 @@ class AdminController extends Controller
     {
         $this->gate();
         return view('admin.visitors', [
-            'total'      => Visit::count(),
-            'uniqueIps'  => Visit::whereNotNull('ip_address')->distinct('ip_address')->count('ip_address'),
-            'today'      => Visit::whereDate('created_at', now()->toDateString())->count(),
-            'rows'       => Visit::latest()->paginate(30),
+            'total'      => Visit::sum('visit_count'),
+            'uniqueIps'  => Visit::whereNotNull('ip_address')->count(),
+            'today'      => Visit::whereDate('updated_at', now()->toDateString())->count(),
+            'rows'       => Visit::latest('updated_at')->paginate(30),
         ]);
     }
 

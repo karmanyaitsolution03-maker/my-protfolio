@@ -136,6 +136,9 @@ small.hint{color:var(--muted)}
       'Inbox' => [
         ['Messages', '✉️', route('admin.messages'), request()->is('admin/messages*')],
       ],
+      'Analytics' => [
+        ['Visitors', '👁️', route('admin.visitors'), request()->is('admin/visitors*')],
+      ],
       'Config' => [
         ['Settings', '🛠️', route('admin.settings'), request()->is('admin/settings*')],
       ],

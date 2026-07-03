@@ -21,6 +21,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/settings', [AdminController::class, 'settingsSave'])->name('settings.save');
     Route::get('/messages', [AdminController::class, 'messages'])->name('messages');
     Route::delete('/messages/{message}', [AdminController::class, 'messageDelete'])->name('messages.delete');
+    Route::get('/visitors', [AdminController::class, 'visitors'])->name('visitors');
 
     Route::get('/{resource}', [AdminController::class, 'index'])->name('res.index');
     Route::get('/{resource}/create', [AdminController::class, 'create'])->name('res.create');

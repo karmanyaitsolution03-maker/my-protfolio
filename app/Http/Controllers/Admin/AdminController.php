@@ -11,6 +11,7 @@ use App\Models\Setting;
 use App\Models\Skill;
 use App\Models\SkillCategory;
 use App\Models\User;
+use App\Models\Visit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -138,6 +139,7 @@ class AdminController extends Controller
         return view('admin.dashboard', [
             'counts'   => $counts,
             'messages' => Message::count(),
+            'visits'   => Visit::count(),
         ]);
     }
 
@@ -183,6 +185,17 @@ class AdminController extends Controller
         $this->gate();
         $message->delete();
         return back()->with('ok', 'Message deleted.');
+    }
+
+    public function visitors()
+    {
+        $this->gate();
+        return view('admin.visitors', [
+            'total'      => Visit::count(),
+            'uniqueIps'  => Visit::whereNotNull('ip_address')->distinct('ip_address')->count('ip_address'),
+            'today'      => Visit::whereDate('created_at', now()->toDateString())->count(),
+            'rows'       => Visit::latest()->paginate(30),
+        ]);
     }
 
     /* ---------- generic CRUD ---------- */

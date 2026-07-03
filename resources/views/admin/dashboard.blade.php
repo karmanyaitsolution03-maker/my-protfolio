@@ -16,6 +16,10 @@
     <span style="font-size:18px">✉️</span>
     <b>{{ $messages }}</b><span>Messages received</span>
   </a>
+  <a class="stat" href="{{ route('admin.visitors') }}">
+    <span style="font-size:18px">👁️</span>
+    <b>{{ $visits }}</b><span>Website visits</span>
+  </a>
 </div>
 <div class="card" style="margin-top:18px">
   <small class="hint">Tip: change name, email, LinkedIn, tagline and about text in <a href="{{ route('admin.settings') }}">Settings</a>. All other content is managed per section above. Changes appear on the site instantly.</small>

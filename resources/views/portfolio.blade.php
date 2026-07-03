@@ -1052,7 +1052,31 @@ function paintVoiceBtn(){
 function speak(text,opts){
   opts=opts||{};
   if(!voiceOn||!text){opts.onend&&opts.onend();return;}
-  // ---- preferred path: meSpeak (real robotic eSpeak voice) ----
+  // ---- preferred path: the device's own system voice (Siri on iOS, Google TTS on Android, etc.) ----
+  if(canSpeak){
+    if(!pickedVoice)loadVoice();
+    if(pickedVoice){
+      try{
+        if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
+        if(speechSynthesis.paused){try{speechSynthesis.resume();}catch(e){}}
+        const u=new SpeechSynthesisUtterance(text);
+        u.voice=pickedVoice;
+        u.lang=pickedVoice.lang||VOICE_LANG;
+        const malePitch=(VOICE_GENDER==='male'), basePitch=malePitch?0.8:1.05;
+        if(opts.bot||opts.intro){u.rate=1.02;u.pitch=malePitch?0.85:1.6;}   // male keeps it deep; female stays chirpy
+        else{u.rate=1;u.pitch=basePitch;}
+        u.volume=1;
+        // robotic sound layer — start NOW (don't wait for onstart, which Chrome may skip)
+        const chatter=RobotSfx.startChatter();
+        const stopBackstop=setTimeout(()=>RobotSfx.stopChatter(chatter),Math.min(15000,text.length*120+2500));
+        u.onstart=()=>vBtn&&vBtn.classList.add('speaking');
+        u.onend=u.onerror=()=>{clearTimeout(stopBackstop);RobotSfx.stopChatter(chatter);vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
+        speechSynthesis.speak(u);
+        return;
+      }catch(e){/* fall through to meSpeak */}
+    }
+  }
+  // ---- fallback: meSpeak (robotic eSpeak voice) — only when the OS has no Web-Speech voice at all ----
   if(meSpeakAvailable()){
     try{
       meSpeak.stop();                                   // cut off any line still talking
@@ -1065,32 +1089,11 @@ function speak(text,opts){
       const finish=()=>{if(done)return;done=true;vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
       meSpeak.speak(text,o,function(){finish();});       // callback fires when playback ends
       return;
-    }catch(e){/* fall through to Web Speech */}
+    }catch(e){/* fall through to chatter-only */}
   }
-  if(!canSpeak){
-    // neither meSpeak (still loading) nor Web Speech — keep the robot audible with chatter
-    const c=RobotSfx.startChatter();
-    setTimeout(()=>{RobotSfx.stopChatter(c);opts.onend&&opts.onend();},Math.min(9000,text.length*70+700));
-    return;
-  }
-  try{
-    if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
-    if(speechSynthesis.paused){try{speechSynthesis.resume();}catch(e){}}
-    if(!pickedVoice)loadVoice();
-    const u=new SpeechSynthesisUtterance(text);
-    if(pickedVoice)u.voice=pickedVoice;
-    u.lang=(pickedVoice&&pickedVoice.lang)||VOICE_LANG;
-    const malePitch=(VOICE_GENDER==='male'), basePitch=malePitch?0.8:1.05;
-    if(opts.bot||opts.intro){u.rate=1.02;u.pitch=malePitch?0.85:1.6;}   // male keeps it deep; female stays chirpy
-    else{u.rate=1;u.pitch=basePitch;}
-    u.volume=1;
-    // robotic sound layer — start NOW (don't wait for onstart, which Chrome may skip)
-    const chatter=RobotSfx.startChatter();
-    const stopBackstop=setTimeout(()=>RobotSfx.stopChatter(chatter),Math.min(15000,text.length*120+2500));
-    u.onstart=()=>vBtn&&vBtn.classList.add('speaking');
-    u.onend=u.onerror=()=>{clearTimeout(stopBackstop);RobotSfx.stopChatter(chatter);vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
-    speechSynthesis.speak(u);
-  }catch(e){RobotSfx.stopChatter();opts.onend&&opts.onend();}
+  // neither a system voice nor meSpeak — keep the robot audible with chatter
+  const c=RobotSfx.startChatter();
+  setTimeout(()=>{RobotSfx.stopChatter(c);opts.onend&&opts.onend();},Math.min(9000,text.length*70+700));
 }
 /* ---- robot talking mouth (visual, runs whenever the bot says something) ---- */
 let botMouthTl=null;

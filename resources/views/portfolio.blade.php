@@ -460,12 +460,22 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   .log{margin-left:38px;padding:24px 20px 22px}
   .log:before{left:-30px}.logline{left:12px}
   /* projects */
-  .proj{padding:22px}
-  .arch{gap:0}
-  .arch .node{padding:8px 8px;font-size:9px;line-height:1.35}
+  .projects{gap:14px}
+  .proj{padding:22px 18px}
+  .pj-kicker{font-size:8.5px;letter-spacing:.18em;line-height:1.6;align-items:flex-start}
+  .pj-kicker i{margin-top:5px;flex:0 0 7px}
+  .proj h3{font-size:21px;line-height:1.22}
+  .proj>p{font-size:13.5px;line-height:1.65}
+  .arch{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:18px}
+  .arch .node{min-width:0;padding:8px 7px;font-size:8px;line-height:1.35;overflow-wrap:anywhere}
   .arch .node small{font-size:7px}
-  .arch .wire{min-width:12px}
-  .pj-metrics{gap:16px;flex-wrap:wrap}
+  .arch .wire{display:none}
+  .pj-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px}
+  .pj-metrics div{min-width:0}
+  .pj-metrics div b{font-size:19px;line-height:1.15}
+  .pj-metrics div span{display:block;font-size:8px;letter-spacing:.08em;line-height:1.45;overflow-wrap:anywhere}
+  .pj-tags{gap:7px;padding-top:18px}
+  .tag{font-size:9px;padding:6px 10px;line-height:1.3;max-width:100%;overflow-wrap:anywhere}
   /* achievements terminal */
   .term-body{padding:18px}
   .ach-rows{padding:6px 18px 22px;gap:12px}

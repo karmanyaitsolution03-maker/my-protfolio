@@ -10,6 +10,30 @@ Route::get('/', [PortfolioController::class, 'home'])->name('home');
 Route::get('/resume', [PortfolioController::class, 'resume'])->name('resume.download');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+/* ---------- sitemap ---------- */
+Route::get('/sitemap.xml', function (\Illuminate\Http\Request $request) {
+    // Build absolute URLs from the request host so the sitemap always
+    // matches the live domain (production) regardless of APP_URL.
+    $base = rtrim($request->getSchemeAndHttpHost(), '/');
+
+    $urls = [
+        ['loc' => $base . '/', 'changefreq' => 'weekly', 'priority' => '1.0'],
+    ];
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
+    $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
+    foreach ($urls as $u) {
+        $xml .= "  <url>\n";
+        $xml .= '    <loc>' . htmlspecialchars($u['loc'], ENT_XML1) . "</loc>\n";
+        $xml .= '    <changefreq>' . $u['changefreq'] . "</changefreq>\n";
+        $xml .= '    <priority>' . $u['priority'] . "</priority>\n";
+        $xml .= "  </url>\n";
+    }
+    $xml .= '</urlset>';
+
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
 /* ---------- admin (simple session auth via ADMIN_PASSWORD in .env) ---------- */
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'loginForm'])->name('login');

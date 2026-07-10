@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class Visit extends Model
 {
-    protected $fillable = ['ip_address', 'user_agent', 'path', 'referrer'];
+    protected $fillable = ['ip_address', 'user_agent', 'path', 'referrer', 'visit_count'];
 
     /** Best-effort "City, Country" for the visitor's IP, cached for a week. */
     public function getLocationAttribute(): string

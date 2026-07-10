@@ -18,12 +18,22 @@ class TrackVisitor
     {
         if ($request->isMethod('GET') && ! $request->is('admin*') && ! $request->is('up')) {
             try {
-                Visit::create([
-                    'ip_address' => $request->ip(),
+                $ip = $request->ip();
+                $attributes = [
                     'user_agent' => substr((string) $request->userAgent(), 0, 255),
                     'path'       => '/' . ltrim($request->path(), '/'),
                     'referrer'   => $request->headers->get('referer'),
-                ]);
+                ];
+
+                // Dedupe repeat visitors by IP: bump the counter on the existing
+                // row instead of inserting a new one for every page load.
+                $existing = $ip ? Visit::where('ip_address', $ip)->first() : null;
+
+                if ($existing) {
+                    $existing->increment('visit_count', 1, $attributes);
+                } else {
+                    Visit::create($attributes + ['ip_address' => $ip]);
+                }
             } catch (\Throwable $e) {
                 // Never let logging break the site.
             }

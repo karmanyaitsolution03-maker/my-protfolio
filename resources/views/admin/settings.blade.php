@@ -12,16 +12,16 @@
   @csrf
 
   {{-- quick jump --}}
-  <div class="card" style="position:sticky;top:64px;z-index:10;display:flex;flex-wrap:wrap;gap:8px;padding:14px 16px">
+  <div class="card settings-jump">
     @foreach($groups as $group => $fields)
-      <a class="btn" style="padding:5px 12px;font-size:12px" href="#g-{{ \Illuminate\Support\Str::slug($group) }}">{{ $group }}</a>
+      <a class="btn" href="#g-{{ \Illuminate\Support\Str::slug($group) }}">{{ $group }}</a>
     @endforeach
   </div>
 
   @foreach($groups as $group => $fields)
   <div class="card" id="g-{{ \Illuminate\Support\Str::slug($group) }}">
     <h3 style="margin-bottom:14px;font-size:15px;color:var(--cyan)">{{ $group }}</h3>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:6px 24px">
+    <div class="settings-grid">
       @foreach($fields as $key => $def)
         @php
           [$label, $default, $type] = $def;
@@ -54,9 +54,15 @@
   </div>
   @endforeach
 
-  <div class="card" style="position:sticky;bottom:0;display:flex;align-items:center;gap:14px">
+  <div class="card settings-actions">
     <button class="btn primary">Save all settings</button>
     <a class="btn" href="{{ route('home') }}" target="_blank">Preview site ↗</a>
   </div>
+</form>
+
+<form method="POST" action="{{ route('admin.migrate') }}" class="card settings-actions settings-migrate" onsubmit="return confirm('Run pending database migrations now?')">
+  @csrf
+  <button class="btn">Run database migrations</button>
+  <small class="hint">Applies any new migration files to the database — use after deploying code changes.</small>
 </form>
 @endsection

@@ -104,6 +104,20 @@ textarea{min-height:90px;resize:vertical}
 .stat span{display:block;color:var(--muted);font-size:12px;margin-top:5px;letter-spacing:.03em}
 .actions{white-space:nowrap}
 small.hint{color:var(--muted)}
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table-wrap table{min-width:640px}
+.settings-jump{
+  position:sticky;top:64px;z-index:10;
+  display:flex;flex-wrap:wrap;gap:8px;
+  padding:14px 16px;
+}
+.settings-jump .btn{padding:5px 12px;font-size:12px}
+.settings-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:6px 24px}
+.settings-actions{
+  position:sticky;bottom:0;
+  display:flex;align-items:center;gap:14px;
+}
+.settings-migrate{position:static}
 
 /* ---------- responsive ---------- */
 #navtoggle{display:none}
@@ -113,6 +127,27 @@ small.hint{color:var(--muted)}
   #navtoggle:checked ~ .shell .side{transform:translateX(0)}
   #navtoggle:checked ~ .scrim{display:block}
   .scrim{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40}
+}
+@media(max-width:600px){
+  body{font-size:13px}
+  .topbar{gap:10px;padding:10px 14px}
+  .topbar .pill{display:none}
+  .topbar form{margin-left:auto}
+  .wrap{padding:18px 12px 36px}
+  h1{font-size:20px;margin-bottom:14px}
+  .card{border-radius:12px;padding:14px;margin-bottom:14px}
+  .btn{padding:8px 12px;max-width:100%;text-align:center;white-space:normal}
+  .settings-jump{top:59px;gap:6px;padding:10px}
+  .settings-jump .btn{padding:5px 9px;font-size:11.5px}
+  .settings-grid{grid-template-columns:minmax(0,1fr);gap:2px}
+  .settings-actions{
+    flex-wrap:wrap;align-items:stretch;gap:10px;
+    padding-bottom:calc(14px + env(safe-area-inset-bottom));
+  }
+  .settings-actions .btn{flex:1 1 140px}
+  .settings-migrate .hint{flex-basis:100%;line-height:1.45}
+  label{margin-top:12px}
+  input[type=text],input[type=number],input[type=password],textarea,select{font-size:12px;padding:9px 10px}
 }
 </style>
 </head>

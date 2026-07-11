@@ -25,7 +25,7 @@ return [
         'tagline'        => ['Hero tagline (HTML)', 'Backend developer focused on <b>Laravel, Symfony, REST APIs, databases, and production support</b>.', 'area'],
         'frameworks'     => ['Core frameworks', 'Laravel / Symfony', 'text'],
         'specialization' => ['Specialization', 'API Development', 'text'],
-        'years'          => ['Years of experience', '2', 'text'],
+        'years'          => ['Years of experience (decimals allowed, e.g. 2.7)', '2.7', 'text'],
         'location'       => ['Location / base', 'Gujarat, India', 'text'],
         'status_label'   => ['Status label', 'Open to opportunities', 'select', [
             'Open to opportunities',
@@ -117,6 +117,18 @@ return [
         'ach_title_hl' => ['Title highlight (:ach = count)', ':ach records. All verified.', 'text'],
     ],
 
+    'Section · Career & Availability' => [
+        'career_show'        => ['Show this section on the site (1 = show, 0 = hide)', '1', 'text'],
+        'career_tag'         => ['Tag', 'MODULE 07 · CAREER & AVAILABILITY', 'text'],
+        'career_title'       => ['Title', 'Availability status:', 'text'],
+        'career_title_hl'    => ['Title highlight', 'ready to deploy.', 'text'],
+        'career_identity_tag'=> ['Matrix tag', '// AVAILABILITY MATRIX — VERIFIED', 'text'],
+        'career_heading'     => ['Body heading', 'Career snapshot', 'text'],
+        'career_note'        => ['Additional note (HTML)', 'I have experience handling both web and mobile application projects. I have independently developed and managed projects such as <b>BizInvoice</b>, which has strengthened my ability to work across both platforms and deliver complete solutions.', 'area'],
+        // The left-side rows (Current CTC, Notice Period, …) are managed under
+        // Admin → Availability, and the ✓ highlight points under Admin → Career Points.
+    ],
+
     'Section · Contact' => [
         'contact_tag'           => ['Tag', 'MODULE 06 · CONTACT COMMAND CENTER', 'text'],
         'contact_title'         => ['Title', 'Open a channel.', 'text'],
@@ -143,24 +155,25 @@ return [
 
     'Navigation / HUD / Footer' => [
         'hud_status'    => ['HUD status', 'A.R.I.A. ONLINE', 'text'],
-        'nav_waypoints' => ['Waypoint labels — 7 lines (deck → comms)',
-            "COMMAND DECK\nPROFILE REPORT\nSKILL MODULES\nEXPERIENCE DB\nPROJECT CENTER\nACHIEVEMENTS\nCOMMS", 'area'],
-        'hud_sectors'   => ['HUD sector names — 7 lines (deck → comms)',
-            "MODULE 00 — COMMAND DECK\nMODULE 01 — PROFILE REPORT\nMODULE 02 — SKILL MODULES\nMODULE 03 — EXPERIENCE DATABASE\nMODULE 04 — PROJECT CENTER\nMODULE 05 — ACHIEVEMENT TERMINAL\nMODULE 06 — COMMS", 'area'],
+        'nav_waypoints' => ['Waypoint labels — 8 lines (deck → availability)',
+            "COMMAND DECK\nPROFILE REPORT\nSKILL MODULES\nEXPERIENCE DB\nPROJECT CENTER\nACHIEVEMENTS\nCOMMS\nAVAILABILITY", 'area'],
+        'hud_sectors'   => ['HUD sector names — 8 lines (deck → availability)',
+            "MODULE 00 — COMMAND DECK\nMODULE 01 — PROFILE REPORT\nMODULE 02 — SKILL MODULES\nMODULE 03 — EXPERIENCE DATABASE\nMODULE 04 — PROJECT CENTER\nMODULE 05 — ACHIEVEMENT TERMINAL\nMODULE 06 — COMMS\nMODULE 07 — CAREER & AVAILABILITY", 'area'],
         'footer_brand'  => ['Footer brand', 'AI COMMAND CENTER', 'text'],
         'footer_status' => ['Footer status', 'ALL MODULES NOMINAL · A.R.I.A. v4.0', 'text'],
         'footer_back'   => ['Footer back-to-top', 'RETURN TO COMMAND DECK ↑', 'text'],
     ],
 
     'AI assistant (floating bot)' => [
-        'assistant_lines' => ['Per-section lines — 7 lines (HTML)',
+        'assistant_lines' => ['Per-section lines — 8 lines (HTML)',
             "Welcome to the command deck, commander. 🛰️ I'm <b>A.R.I.A.</b> — scroll, and I'll walk you through the subject file.\n"
             . "My full analysis of :name. Confidence level: <b>99.7%</b>. I don't say that about many humans.\n"
             . "Five skill modules, <b>all active</b>. The energy readings are from real production systems.\n"
             . "The experience database — :exp mission logs, one of them <b>still transmitting live</b>.\n"
             . "Watch the data flow! Every system here is <b>running in production</b> right now.\n"
             . "Achievement query complete: <b>:ach records, all verified</b>. My database doesn't lie. 🏆\n"
-            . "<b>Communication channels established.</b> Awaiting connection request… 📡", 'area'],
+            . "<b>Communication channels established.</b> Awaiting connection request… 📡\n"
+            . "Availability matrix decoded: :name is <b>open to opportunities</b>. Notice period and CTC are all on file. 🚀", 'area'],
         'assistant_idle'  => ['Idle tips — one per line (HTML)',
             "Still analyzing, commander? The <b>waypoints</b> on the right jump between modules instantly.\n"
             . "Fun fact: I run on <b>coffee telemetry</b> from :first's keyboard. Readings are high.\n"

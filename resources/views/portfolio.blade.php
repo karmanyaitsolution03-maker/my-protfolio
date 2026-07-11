@@ -279,6 +279,10 @@ main{position:relative;z-index:2}
 .report-body p b{color:var(--text);font-weight:600}
 .report-note{margin-top:auto;padding-top:18px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--faint);border-top:1px dashed var(--line)}
 .report-note b{color:var(--green)}
+.career-points{list-style:none;display:flex;flex-direction:column;gap:13px;margin:6px 0 10px}
+.career-points li{position:relative;padding-left:28px;color:var(--muted);font-size:14.5px;line-height:1.55}
+.career-points li:before{content:"✓";position:absolute;left:0;top:1px;color:var(--green);font-weight:700;font-family:var(--mono)}
+.career-points li b{color:var(--text);font-weight:600}
 @media(max-width:880px){.report{grid-template-columns:1fr}.report-id{border-right:none;border-bottom:1px solid var(--line)}}
 
 /* ===== MODULE 02 — SKILL MODULES ===== */
@@ -573,6 +577,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
 
 @php
   $wpHrefs = ['#deck','#profile','#skills','#logs','#projects','#achievements','#contact'];
+  if (($settings['career_show'] ?? '1') !== '0') { $wpHrefs[] = '#career'; }
   $wpLabels = preg_split('/\r\n|\r|\n/', trim($settings['nav_waypoints']));
   $sectorNames = array_map('trim', preg_split('/\r\n|\r|\n/', trim($settings['hud_sectors'])));
 @endphp
@@ -803,6 +808,36 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
     </div>
   </div>
 </section>
+
+@if(($settings['career_show'] ?? '1') !== '0')
+<!-- MODULE 07 — CAREER & AVAILABILITY -->
+<section class="module" id="career" aria-label="Career and availability" style="padding-bottom:140px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-tag" data-reveal>{{ $settings['career_tag'] }}</div>
+      <h2 class="sec-title" data-reveal>{!! $settings['career_title'] !!}<br><span class="g">{!! $settings['career_title_hl'] !!}</span></h2>
+    </div>
+    <div class="report glass" data-reveal data-tilt><div class="spot"></div>
+      <div class="report-id">
+        <div class="shimmer" aria-hidden="true"></div>
+        <div class="report-tag">{{ $settings['career_identity_tag'] }}</div>
+        @foreach($availability as $r)
+        <div class="id-row"><span class="k">{{ strtoupper($r->label) }}</span><span class="v {{ $r->accentClass() }}">{{ $r->value }}</span></div>
+        @endforeach
+      </div>
+      <div class="report-body">
+        <h3>{{ $settings['career_heading'] }}</h3>
+        @if($careerPoints->count())
+        <ul class="career-points">
+          @foreach($careerPoints as $pt)<li>{!! $pt->text !!}</li>@endforeach
+        </ul>
+        @endif
+        <div class="report-note">{!! $settings['career_note'] !!}</div>
+      </div>
+    </div>
+  </div>
+</section>
+@endif
 </main>
 
 <div id="complete" role="dialog" aria-label="Connection established">
@@ -1623,10 +1658,12 @@ document.querySelectorAll('[data-bar]').forEach(bar=>{
 });
 document.querySelectorAll('[data-count]').forEach(el=>{
   const end=+el.dataset.count;
-  if(!hasGSAP||reduced){el.textContent=end;return;}
+  const dec=(String(el.dataset.count).split('.')[1]||'').length;   // decimals to show, e.g. "2.7" → 1
+  const fmt=v=>dec?v.toFixed(dec):String(Math.round(v));
+  if(!hasGSAP||reduced){el.textContent=fmt(end);return;}
   const o={v:0};
   ScrollTrigger.create({trigger:el,start:'top 88%',once:true,
-    onEnter(){gsap.to(o,{v:end,duration:1.5,ease:'power3.out',onUpdate(){el.textContent=Math.round(o.v);}});}});
+    onEnter(){gsap.to(o,{v:end,duration:1.5,ease:'power3.out',onUpdate(){el.textContent=fmt(o.v);}});}});
 });
 document.querySelectorAll('[data-ach]').forEach((b,i)=>{
   if(!hasGSAP||reduced)return;

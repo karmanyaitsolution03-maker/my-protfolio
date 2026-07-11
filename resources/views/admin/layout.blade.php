@@ -167,6 +167,8 @@ small.hint{color:var(--muted)}
         ['Experience',       '🛰️', route('admin.res.index','experiences'),      request()->is('admin/experiences*')],
         ['Projects',         '🚀', route('admin.res.index','projects'),         request()->is('admin/projects*')],
         ['Achievements',     '🏆', route('admin.res.index','achievements'),     request()->is('admin/achievements*')],
+        ['Availability',     '💼', route('admin.res.index','availability'),     request()->is('admin/availability*')],
+        ['Career Points',    '✅', route('admin.res.index','career-points'),    request()->is('admin/career-points*')],
       ],
       'Inbox' => [
         ['Messages', '✉️', route('admin.messages'), request()->is('admin/messages*')],

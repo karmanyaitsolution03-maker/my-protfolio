@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Achievement;
+use App\Models\Availability;
+use App\Models\CareerPoint;
 use App\Models\Experience;
 use App\Models\Project;
 use App\Models\Setting;
@@ -18,6 +20,8 @@ class PortfolioController extends Controller
         $experiences     = Experience::orderBy('position')->get();
         $projects        = Project::orderBy('position')->get();
         $achievements    = Achievement::orderBy('position')->get();
+        $availability    = Availability::orderBy('position')->orderBy('id')->get();
+        $careerPoints    = CareerPoint::orderBy('position')->orderBy('id')->get();
 
         $settings = Setting::resolved();
         $settings = $this->applyTokens($settings, $experiences->count(), $projects->count(), $achievements->count());
@@ -28,7 +32,7 @@ class PortfolioController extends Controller
             ['k' => 'DESIGNATION',       'v' => strtoupper($settings['designation']),                                    'cls' => 'cy'],
             ['k' => 'CORE FRAMEWORKS',   'v' => strtoupper($settings['frameworks']),                                     'cls' => ''],
             ['k' => 'SPECIALIZATION',    'v' => strtoupper($settings['specialization']),                                 'cls' => ''],
-            ['k' => 'FIELD EXPERIENCE',  'v' => '<span data-count="' . (int) $settings['years'] . '">0</span>+ YEARS',   'cls' => ''],
+            ['k' => 'FIELD EXPERIENCE',  'v' => '<span data-count="' . (float) $settings['years'] . '">0</span>+ YEARS', 'cls' => ''],
             ['k' => 'BASE OF OPERATIONS','v' => strtoupper($settings['location']),                                       'cls' => ''],
             ['k' => 'RELIABILITY SCORE', 'v' => 'EXCEPTIONAL ★',                                                          'cls' => 'gn'],
             ['k' => 'STATUS',            'v' => '● ' . strtoupper($settings['status_label']),                            'cls' => 'gn'],
@@ -43,6 +47,8 @@ class PortfolioController extends Controller
         return view('portfolio', [
             'settings'        => $settings,
             'profileRows'     => $profileRows,
+            'availability'    => $availability,
+            'careerPoints'    => $careerPoints,
             'about'           => $about,
             'skillCategories' => $skillCategories,
             'experiences'     => $experiences,

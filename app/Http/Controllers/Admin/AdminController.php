@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Achievement;
+use App\Models\Availability;
+use App\Models\CareerPoint;
 use App\Models\Experience;
 use App\Models\Message;
 use App\Models\Project;
@@ -73,6 +75,26 @@ class AdminController extends Controller
                 'metrics'     => ['json', 'Metrics — JSON: [{"value":"30+","label":"ENDPOINTS"}]'],
                 'tags'        => ['json', 'Tags — JSON: ["Laravel","MySQL"]'],
                 'position'    => ['number', 'Order'],
+            ],
+        ],
+        'availability' => [
+            'model'  => Availability::class,
+            'title'  => 'Availability (Career Snapshot)',
+            'list'   => ['label', 'value', 'accent', 'position'],
+            'fields' => [
+                'label'    => ['text', 'Label (e.g. CURRENT CTC)'],
+                'value'    => ['text', 'Value (e.g. ₹3,00,000)'],
+                'accent'   => ['text', 'Accent color — leave blank, or "cyan" / "green" to highlight'],
+                'position' => ['number', 'Order'],
+            ],
+        ],
+        'career-points' => [
+            'model'  => CareerPoint::class,
+            'title'  => 'Career Highlight Points',
+            'list'   => ['text', 'position'],
+            'fields' => [
+                'text'     => ['textarea', 'Point text (HTML allowed, e.g. I have a <b>2-month notice period</b>.)'],
+                'position' => ['number', 'Order'],
             ],
         ],
         'achievements' => [

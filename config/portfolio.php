@@ -37,11 +37,13 @@ return [
     ],
 
     'Contact details' => [
-        'email'          => ['Email', 'rishabh.parekh@example.com', 'text'],
-        'linkedin'       => ['LinkedIn URL', 'https://www.linkedin.com', 'text'],
-        'linkedin_label' => ['LinkedIn label', 'linkedin.com/in/rishabh-parekh', 'text'],
-        'response_time'  => ['Response time', '< 24 HOURS', 'text'],
-        'timezone'       => ['Timezone', 'IST (UTC +5:30)', 'text'],
+        'email'            => ['Email', 'rishabh.parekh@example.com', 'text'],
+        'linkedin'         => ['LinkedIn URL', 'https://www.linkedin.com', 'text'],
+        'linkedin_label'   => ['LinkedIn label', 'linkedin.com/in/rishabh-parekh', 'text'],
+        'whatsapp_number'  => ['WhatsApp number (digits only, with country code, e.g. 919313039898)', '919313039898', 'text'],
+        'whatsapp_label'   => ['WhatsApp label', 'Chat on WhatsApp', 'text'],
+        'response_time'    => ['Response time', '< 24 HOURS', 'text'],
+        'timezone'         => ['Timezone', 'IST (UTC +5:30)', 'text'],
     ],
 
     'About (AI assessment)' => [
@@ -129,6 +131,10 @@ return [
         // Admin → Availability, and the ✓ highlight points under Admin → Career Points.
     ],
 
+    'Section · SEO / Sharing' => [
+        'og_image' => ['Social share image (og:image) — shown when the link is shared on LinkedIn/WhatsApp/etc, recommended 1200x630px', '', 'image'],
+    ],
+
     'Section · Contact' => [
         'contact_tag'           => ['Tag', 'MODULE 06 · CONTACT COMMAND CENTER', 'text'],
         'contact_title'         => ['Title', 'Open a channel.', 'text'],
@@ -149,24 +155,24 @@ return [
     'Success modal' => [
         'complete_tag'   => ['Small tag', 'TRANSMISSION SUCCESSFUL', 'text'],
         'complete_title' => ['Title', 'CONNECTION ESTABLISHED', 'text'],
-        'complete_text'  => ['Body text', 'Your message is en route to the command center. Expect a reply within 24 hours. A.R.I.A. thanks you for exploring the system, commander.', 'area'],
+        'complete_text'  => ['Body text', "Your message is en route to the command center. Expect a reply within 24 hours. :first's Assistant thanks you for exploring the system, commander.", 'area'],
         'complete_btn'   => ['Button', 'RETURN TO COMMAND DECK ↩', 'text'],
     ],
 
     'Navigation / HUD / Footer' => [
-        'hud_status'    => ['HUD status', 'A.R.I.A. ONLINE', 'text'],
+        'hud_status'    => ['HUD status', 'ASSISTANT ONLINE', 'text'],
         'nav_waypoints' => ['Waypoint labels — 8 lines (deck → availability)',
             "COMMAND DECK\nPROFILE REPORT\nSKILL MODULES\nEXPERIENCE DB\nPROJECT CENTER\nACHIEVEMENTS\nCOMMS\nAVAILABILITY", 'area'],
         'hud_sectors'   => ['HUD sector names — 8 lines (deck → availability)',
             "MODULE 00 — COMMAND DECK\nMODULE 01 — PROFILE REPORT\nMODULE 02 — SKILL MODULES\nMODULE 03 — EXPERIENCE DATABASE\nMODULE 04 — PROJECT CENTER\nMODULE 05 — ACHIEVEMENT TERMINAL\nMODULE 06 — COMMS\nMODULE 07 — CAREER & AVAILABILITY", 'area'],
         'footer_brand'  => ['Footer brand', 'AI COMMAND CENTER', 'text'],
-        'footer_status' => ['Footer status', 'ALL MODULES NOMINAL · A.R.I.A. v4.0', 'text'],
+        'footer_status' => ['Footer status', 'ALL MODULES NOMINAL · ASSISTANT v4.0', 'text'],
         'footer_back'   => ['Footer back-to-top', 'RETURN TO COMMAND DECK ↑', 'text'],
     ],
 
     'AI assistant (floating bot)' => [
         'assistant_lines' => ['Per-section lines — 8 lines (HTML)',
-            "Welcome to the command deck, commander. 🛰️ I'm <b>A.R.I.A.</b> — scroll, and I'll walk you through the subject file.\n"
+            "Welcome to the command deck, commander. 🛰️ I'm <b>:first's Assistant</b> — scroll, and I'll walk you through the subject file.\n"
             . "My full analysis of :name. Confidence level: <b>99.7%</b>. I don't say that about many humans.\n"
             . "Five skill modules, <b>all active</b>. The energy readings are from real production systems.\n"
             . "The experience database — :exp mission logs, one of them <b>still transmitting live</b>.\n"
@@ -179,7 +185,6 @@ return [
             . "Fun fact: I run on <b>coffee telemetry</b> from :first's keyboard. Readings are high.\n"
             . "The <b>resume download</b> in Module 06 contains the complete subject file. 📄\n"
             . "Tip: hover the project cards — the <b>data flows</b> respond to attention. Like me.", 'area'],
-        'assistant_click'  => ['On click (HTML)', "Beep! 🤖 Query me anytime. Or jump to <b>Module 06</b> to open a channel with :first.", 'text'],
         'assistant_focus'  => ['On contact focus (HTML)', 'Incoming transmission detected! Boosting signal… 📡', 'text'],
         'assistant_resume' => ['On resume click (HTML)', 'Subject file transferred. Classification: <b>highly recommendable</b>. 📄✨', 'text'],
     ],

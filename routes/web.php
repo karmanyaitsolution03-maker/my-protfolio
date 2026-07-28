@@ -1,14 +1,18 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\InteractionController;
 use App\Http\Controllers\PortfolioController;
 use Illuminate\Support\Facades\Route;
 
 /* ---------- public ---------- */
 Route::get('/', [PortfolioController::class, 'home'])->name('home');
 Route::get('/resume', [PortfolioController::class, 'resume'])->name('resume.download');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
+Route::post('/interactions', [InteractionController::class, 'track'])->middleware('throttle:20,1')->name('interactions.track');
+Route::post('/assistant/chat', [AssistantController::class, 'chat'])->middleware('throttle:10,1')->name('assistant.chat');
 
 /* ---------- sitemap ---------- */
 Route::get('/sitemap.xml', function (\Illuminate\Http\Request $request) {
@@ -45,6 +49,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/settings', [AdminController::class, 'settingsSave'])->name('settings.save');
     Route::post('/migrate', [AdminController::class, 'migrate'])->name('migrate');
     Route::get('/messages', [AdminController::class, 'messages'])->name('messages');
+    Route::get('/messages/export', [AdminController::class, 'messagesExport'])->name('messages.export');
     Route::delete('/messages/{message}', [AdminController::class, 'messageDelete'])->name('messages.delete');
     Route::get('/visitors', [AdminController::class, 'visitors'])->name('visitors');
 

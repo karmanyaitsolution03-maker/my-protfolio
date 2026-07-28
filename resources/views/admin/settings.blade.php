@@ -37,6 +37,13 @@
               </p>
             @endif
             <input type="file" id="s_{{ $key }}" name="settings[{{ $key }}]" accept="application/pdf">
+          @elseif($type === 'image')
+            @if(!empty($values[$key]))
+              <p class="hint" style="margin:4px 0 8px">
+                <img src="{{ asset('storage/' . $values[$key]) }}" alt="" style="max-width:220px;max-height:120px;border-radius:6px;border:1px solid var(--line);display:block">
+              </p>
+            @endif
+            <input type="file" id="s_{{ $key }}" name="settings[{{ $key }}]" accept="image/png,image/jpeg,image/webp">
           @elseif($type === 'select')
             <select id="s_{{ $key }}" name="settings[{{ $key }}]">
               @foreach($options as $opt)

@@ -20,6 +20,26 @@
     <span style="font-size:18px">👁️</span>
     <b>{{ $visits }}</b><span>Website visits</span>
   </a>
+  <div class="stat">
+    <span style="font-size:18px">🖱️</span>
+    <b>{{ $contactClicks }}</b><span>"Contact me" clicks</span>
+  </div>
+  <div class="stat">
+    <span style="font-size:18px">📄</span>
+    <b>{{ $resumeClicks }}</b><span>Resume downloads</span>
+  </div>
+  <div class="stat">
+    <span style="font-size:18px">💬</span>
+    <b>{{ $whatsappClicks }}</b><span>WhatsApp clicks</span>
+  </div>
+</div>
+<div class="card" style="margin-top:18px">
+  <h3 style="margin:0 0 10px;font-size:14px">Conversion funnel</h3>
+  <small class="hint">
+    {{ $visits }} visits
+    &rarr; {{ $contactClicks }} clicked "contact me" ({{ $visits > 0 ? round($contactClicks / $visits * 100) : 0 }}%)
+    &rarr; {{ $messages }} messages sent ({{ $contactClicks > 0 ? round($messages / $contactClicks * 100) : 0 }}% of clicks)
+  </small>
 </div>
 <div class="card" style="margin-top:18px">
   <small class="hint">Tip: change name, email, LinkedIn, tagline and about text in <a href="{{ route('admin.settings') }}">Settings</a>. All other content is managed per section above. Changes appear on the site instantly.</small>

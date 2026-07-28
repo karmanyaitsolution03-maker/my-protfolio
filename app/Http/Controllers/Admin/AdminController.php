@@ -7,6 +7,7 @@ use App\Models\Achievement;
 use App\Models\Availability;
 use App\Models\CareerPoint;
 use App\Models\Experience;
+use App\Models\Interaction;
 use App\Models\Message;
 use App\Models\Project;
 use App\Models\Setting;
@@ -160,9 +161,12 @@ class AdminController extends Controller
             $counts[$key] = ['title' => $cfg['title'], 'count' => $cfg['model']::count()];
         }
         return view('admin.dashboard', [
-            'counts'   => $counts,
-            'messages' => Message::count(),
-            'visits'   => Visit::sum('visit_count'),
+            'counts'        => $counts,
+            'messages'      => Message::count(),
+            'visits'        => Visit::sum('visit_count'),
+            'contactClicks'  => Interaction::where('type', 'contact_click')->count(),
+            'resumeClicks'   => Interaction::where('type', 'resume_click')->count(),
+            'whatsappClicks' => Interaction::where('type', 'whatsapp_click')->count(),
         ]);
     }
 
@@ -190,6 +194,7 @@ class AdminController extends Controller
 
         $request->validate([
             'settings.resume_file' => 'nullable|file|mimes:pdf|max:10240',
+            'settings.og_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
         ]);
 
         foreach ((array) $request->input('settings', []) as $key => $value) {
@@ -198,7 +203,8 @@ class AdminController extends Controller
 
         foreach ((array) $request->file('settings', []) as $key => $file) {
             if ($file && $file->isValid()) {
-                $path = $file->storeAs('resumes', $key . '.' . $file->getClientOriginalExtension(), 'public');
+                $folder = $key === 'og_image' ? 'og-images' : 'resumes';
+                $path = $file->storeAs($folder, $key . '.' . $file->getClientOriginalExtension(), 'public');
                 Setting::updateOrCreate(['key' => $key], ['value' => $path]);
             }
         }
@@ -206,10 +212,46 @@ class AdminController extends Controller
         return back()->with('ok', 'Settings saved.');
     }
 
-    public function messages()
+    public function messages(Request $request)
     {
         $this->gate();
-        return view('admin.messages', ['rows' => Message::latest()->paginate(20)]);
+        $q = trim((string) $request->query('q', ''));
+
+        $unreadIds = Message::whereNull('read_at')->pluck('id')->all();
+        $rows = Message::when($q !== '', fn ($query) => $query->where(function ($w) use ($q) {
+                $w->where('name', 'like', "%{$q}%")
+                  ->orWhere('email', 'like', "%{$q}%")
+                  ->orWhere('message', 'like', "%{$q}%");
+            }))
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
+        Message::whereNull('read_at')->update(['read_at' => now()]);
+
+        return view('admin.messages', ['rows' => $rows, 'unreadIds' => $unreadIds, 'q' => $q]);
+    }
+
+    public function messagesExport(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse
+    {
+        $this->gate();
+        $q = trim((string) $request->query('q', ''));
+
+        $rows = Message::when($q !== '', fn ($query) => $query->where(function ($w) use ($q) {
+                $w->where('name', 'like', "%{$q}%")
+                  ->orWhere('email', 'like', "%{$q}%")
+                  ->orWhere('message', 'like', "%{$q}%");
+            }))
+            ->latest()
+            ->get();
+
+        return response()->streamDownload(function () use ($rows) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, ['Date', 'Name', 'Email', 'Message']);
+            foreach ($rows as $m) {
+                fputcsv($out, [$m->created_at->format('Y-m-d H:i'), $m->name, $m->email, $m->message]);
+            }
+            fclose($out);
+        }, 'messages-' . now()->format('Y-m-d') . '.csv', ['Content-Type' => 'text/csv']);
     }
 
     public function messageDelete(Message $message)

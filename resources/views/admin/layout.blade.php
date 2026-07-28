@@ -171,7 +171,9 @@ small.hint{color:var(--muted)}
         ['Career Points',    '✅', route('admin.res.index','career-points'),    request()->is('admin/career-points*')],
       ],
       'Inbox' => [
-        ['Messages', '✉️', route('admin.messages'), request()->is('admin/messages*')],
+        ['Messages' . (($unread = \App\Models\Message::whereNull('read_at')->count()) > 0
+            ? ' <span style="background:#ff6b9d;color:#03101A;font-size:10px;font-weight:700;padding:1px 6px;border-radius:9px;margin-left:6px">' . $unread . '</span>'
+            : ''), '✉️', route('admin.messages'), request()->is('admin/messages*')],
       ],
       'Analytics' => [
         ['Visitors', '👁️', route('admin.visitors'), request()->is('admin/visitors*')],
@@ -182,17 +184,18 @@ small.hint{color:var(--muted)}
     ];
   @endphp
 
+  @php $__brandFirstName = \App\Models\Setting::resolved()['first_name'] ?? ''; @endphp
   <aside class="side">
     <div class="brand">
-      <div class="logo">A</div>
-      <div class="who"><b>A.R.I.A.</b><span>ADMIN CONSOLE</span></div>
+      <div class="logo">{{ strtoupper(substr($__brandFirstName, 0, 1)) ?: 'A' }}</div>
+      <div class="who"><b>{{ $__brandFirstName }}'s Assistant</b><span>ADMIN CONSOLE</span></div>
     </div>
     <nav class="nav">
       @foreach($items as $group => $links)
         <div class="grp">{{ $group }}</div>
         @foreach($links as [$label, $icon, $url, $active])
           <a class="item {{ $active ? 'active' : '' }}" href="{{ $url }}">
-            <span class="ic">{{ $icon }}</span>{{ $label }}
+            <span class="ic">{{ $icon }}</span>{!! $label !!}
           </a>
         @endforeach
       @endforeach

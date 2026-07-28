@@ -7,6 +7,16 @@
 <meta name="description" content="A cinematic AI-powered introduction to {{ $settings['name'] }} — Backend Software Engineer building scalable systems, APIs, and digital experiences that power modern products."/>
 <meta property="og:title" content="{{ $settings['name'] }} — AI Command Center"/>
 <meta property="og:description" content="The AI is booting. Prepare for introduction."/>
+<meta property="og:url" content="{{ url()->current() }}"/>
+<link rel="canonical" href="{{ url()->current() }}"/>
+@if(!empty($settings['og_image']))
+<meta property="og:image" content="{{ asset('storage/' . $settings['og_image']) }}"/>
+<meta name="twitter:card" content="summary_large_image"/>
+@else
+<meta name="twitter:card" content="summary"/>
+@endif
+<meta name="twitter:title" content="{{ $settings['name'] }} — AI Command Center"/>
+<meta name="twitter:description" content="{{ $settings['name'] }} — Backend Software Engineer building scalable systems, APIs, and digital experiences that power modern products."/>
 <meta name="theme-color" content="#020308"/>
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -154,15 +164,28 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .eg-card.c1{left:8%;top:18%}.eg-card.c2{right:9%;top:22%;animation-delay:-1.4s}.eg-card.c3{left:12%;bottom:18%;animation-delay:-2.6s}.eg-card.c4{right:12%;bottom:16%;animation-delay:-3.8s}
 @keyframes egGrid{to{background-position:0 72px,72px 0}}
 @keyframes egFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-.eg-box{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px}
-.eg-ring{width:74px;height:74px;border-radius:50%;border:2px solid var(--cyan);border-top-color:transparent;animation:egspin 1.1s linear infinite;opacity:.45;margin-bottom:8px}
-@keyframes egspin{to{transform:rotate(360deg)}}
+.eg-box{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px}
+.eg-tag{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--cyan);border:1px solid var(--line);border-radius:6px;padding:6px 16px;margin-bottom:6px}
 .eg-title{font-family:var(--display,sans-serif);font-weight:700;font-size:clamp(38px,7.2vw,76px);letter-spacing:.06em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 50px rgba(61,232,255,.18)}
-.eg-sub{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--text);text-transform:uppercase}
-.eg-copy{max-width:520px;color:var(--muted);font-size:15px;line-height:1.65;margin-top:2px}
-#enterBtn{margin-top:18px;font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.08em;color:#03101A;background:linear-gradient(135deg,var(--cyan),var(--green));border:none;border-radius:999px;padding:15px 34px;cursor:pointer;box-shadow:0 0 32px rgba(61,232,255,.4);transition:.2s}
-#enterBtn:hover{transform:translateY(-2px) scale(1.03);filter:brightness(1.06)}
-.eg-hint{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin-top:8px}
+.eg-sub{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--text);text-transform:uppercase;margin-bottom:8px}
+.eg-card-main{display:flex;align-items:center;gap:24px;text-align:left;background:rgba(10,16,32,.6);
+  border:1px solid var(--line-hot);border-radius:22px;padding:26px 32px;max-width:640px;width:100%;
+  box-shadow:0 0 60px rgba(61,232,255,.08),0 20px 50px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+.eg-avatar{flex:none;width:104px;height:114px}
+.eg-avatar svg{width:100%;height:100%;filter:drop-shadow(0 8px 20px rgba(0,0,0,.4))}
+.eg-card-content{flex:1;min-width:0}
+.eg-greet{font-size:clamp(16px,2.4vw,19px);font-weight:600;color:var(--text);margin-bottom:6px}
+.eg-greet b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eg-desc{color:var(--muted);font-size:13.5px;line-height:1.55}
+.eg-actions{display:flex;gap:16px;margin-top:22px;flex-wrap:wrap;justify-content:center}
+.eg-action-btn{display:flex;flex-direction:column;align-items:flex-start;gap:4px;background:rgba(255,255,255,.03);
+  border:1px solid var(--line);border-radius:14px;padding:14px 22px;color:var(--text);cursor:pointer;transition:.25s;min-width:190px}
+.eg-action-btn span{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.04em}
+.eg-action-btn small{color:var(--muted);font-size:11.5px}
+.eg-action-btn:hover{border-color:var(--line-hot);transform:translateY(-2px)}
+.eg-action-btn.primary{border-color:rgba(61,232,255,.5);box-shadow:0 0 24px rgba(61,232,255,.15)}
+.eg-hint{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+@media(max-width:640px){.eg-card-main{flex-direction:column;text-align:center;padding:22px}.eg-avatar{width:84px;height:92px}.eg-actions{flex-direction:column;width:100%}.eg-action-btn{width:100%;align-items:center}}
 #skipIntro{position:absolute;z-index:8;right:22px;bottom:20px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--faint);padding:10px 18px;border:1px solid var(--line);border-radius:999px;transition:.3s;background:rgba(2,3,8,.5)}
 #skipIntro:hover{color:var(--text);border-color:var(--line-hot)}
 #voiceToggle{position:fixed;z-index:6000;left:18px;bottom:18px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--cyan);padding:9px 14px;border:1px solid var(--line);border-radius:999px;transition:.3s;background:rgba(2,3,8,.55);backdrop-filter:blur(6px);cursor:pointer;display:flex;align-items:center;gap:7px}
@@ -196,6 +219,15 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 /* ============================= MODULES (sections) ============================= */
 main{position:relative;z-index:2}
 .module{position:relative;padding:clamp(110px,15vh,180px) clamp(20px,4vw,40px)}
+.module.ai-focus:before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  box-shadow:inset 0 0 0 1px rgba(61,232,255,.5),inset 0 0 90px rgba(61,232,255,.1);
+  animation:aiFocusPulse 1.7s ease-in-out infinite}
+.module.ai-focus:after{content:"◉ ASSISTANT IS EXPLAINING THIS";position:absolute;top:clamp(28px,5vh,50px);left:clamp(20px,4vw,40px);z-index:3;
+  font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--cyan);
+  background:rgba(6,10,22,.85);border:1px solid var(--line-hot);border-radius:99px;padding:6px 12px;
+  animation:aiFocusFade .4s ease-out}
+@keyframes aiFocusPulse{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes aiFocusFade{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
 .wrap{max-width:1120px;margin:0 auto;position:relative}
 .sec-head{margin-bottom:clamp(40px,6vh,64px)}
 .sec-tag{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.3em;color:var(--cyan);margin-bottom:18px}
@@ -427,6 +459,40 @@ main{position:relative;z-index:2}
 #bubble b{color:var(--cyan)}
 @media(max-width:700px){#bot{width:70px}#bubble{left:92px;max-width:190px;font-size:11.5px}}
 
+#botChatToggle{position:fixed;right:clamp(14px,3vw,36px);bottom:clamp(20px,4vh,40px);z-index:2850;
+  font-family:var(--mono);font-size:12px;letter-spacing:.05em;color:var(--text);
+  background:rgba(6,10,22,.9);border:1px solid var(--line-hot);border-radius:99px;padding:12px 20px;
+  cursor:pointer;backdrop-filter:blur(10px);transition:.25s;box-shadow:0 12px 30px rgba(0,0,0,.45),0 0 0 rgba(61,232,255,.4);
+  animation:chatPulse 2.6s ease-in-out infinite}
+#botChatToggle:hover{border-color:var(--cyan);color:var(--cyan);animation:none}
+#botChatToggle.hide{display:none}
+@keyframes chatPulse{0%,100%{box-shadow:0 12px 30px rgba(0,0,0,.45),0 0 0 0 rgba(61,232,255,.35)}50%{box-shadow:0 12px 30px rgba(0,0,0,.45),0 0 0 8px rgba(61,232,255,0)}}
+@media(max-width:700px){#botChatToggle{right:8px;bottom:8px;padding:10px 16px;font-size:11px}}
+#botChat{position:fixed;right:clamp(14px,3vw,36px);bottom:clamp(20px,4vh,40px);z-index:2900;
+  width:min(360px,90vw);height:min(72vh,560px);max-height:calc(100vh - 40px);display:flex;flex-direction:column;overscroll-behavior:contain;
+  border-radius:16px;border:1px solid var(--line-hot);background:rgba(6,10,22,.97);backdrop-filter:blur(14px);
+  box-shadow:0 20px 50px rgba(0,0,0,.6),0 0 24px rgba(61,232,255,.12);
+  opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;
+  transition:opacity .3s,transform .3s var(--ease)}
+#botChat.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+#botChatHead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--cyan);text-transform:uppercase;flex:none}
+#botChatClose{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;line-height:1;padding:4px 6px;border-radius:6px;transition:.2s}
+#botChatClose:hover{color:var(--text);background:rgba(255,255,255,.06)}
+#botChatLog{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:14px 14px 6px;display:flex;flex-direction:column;gap:9px}
+#botChatLog .msg{font-size:12.5px;line-height:1.5;padding:8px 11px;border-radius:10px;max-width:88%}
+#botChatLog .msg.user{align-self:flex-end;background:rgba(61,232,255,.14);color:var(--text)}
+#botChatLog .msg.assistant{align-self:flex-start;background:rgba(255,255,255,.05);color:var(--muted)}
+#botChatForm{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);flex:none}
+#botChatForm input{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:9px 11px;color:var(--text);font-size:12.5px}
+#botChatForm input:focus{outline:none;border-color:var(--line-hot)}
+#botChatForm button[type=submit]{background:var(--grad);color:#03040A;border:none;border-radius:9px;padding:0 14px;font-weight:700;cursor:pointer}
+#botChatMic{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:9px;padding:0 11px;font-size:14px;cursor:pointer;transition:.2s}
+#botChatMic:hover{border-color:var(--line-hot)}
+#botChatMic.listening{background:rgba(255,107,157,.18);border-color:var(--rose,#FF6B9D);animation:pulse 1.2s infinite}
+#botChatMic[hidden]{display:none}
+@media(max-width:700px){#botChat{right:8px;bottom:8px;left:8px;width:auto;height:min(70vh,520px)}}
+
 footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px clamp(20px,4vw,40px)}
 .foot{max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint)}
 .foot .ok{color:var(--green)}
@@ -505,11 +571,41 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
       <div class="eg-card c4"><b>Handyman</b>Service booking<small>REST flows / Status</small></div>
     </div>
     <div class="eg-box">
-      <div class="eg-ring" aria-hidden="true"></div>
+      <div class="eg-tag">[ {{ $settings['footer_brand'] }} ]</div>
       <div class="eg-title">{{ strtoupper($settings['name']) }}</div>
-      <div class="eg-sub">{{ $settings['footer_brand'] }}</div>
-      <p class="eg-copy">Start the portfolio intro. The assistant will briefly introduce the work, skills, and project highlights.</p>
-      <button id="enterBtn">START INTRO</button>
+      <div class="eg-sub">// AI-POWERED PORTFOLIO //</div>
+
+      <div class="eg-card-main">
+        <div class="eg-avatar" aria-hidden="true">
+          <svg viewBox="0 0 100 110">
+            <g>
+              <line x1="50" y1="14" x2="50" y2="4" stroke="#8C97B4" stroke-width="2"/>
+              <circle cx="50" cy="3" r="3.4" fill="#3DE8FF"/>
+              <circle cx="50" cy="46" r="30" fill="#0D1428" stroke="#3A4A75" stroke-width="2"/>
+              <ellipse cx="50" cy="44" rx="22" ry="18" fill="#071020" stroke="#3DE8FF" stroke-width="1.6" opacity=".95"/>
+              <ellipse cx="42" cy="36" rx="9" ry="5" fill="rgba(120,200,255,.18)"/>
+              <circle cx="42" cy="44" r="4.6" fill="#3DE8FF"/>
+              <circle cx="58" cy="44" r="4.6" fill="#3DE8FF"/>
+              <path d="M44 53 Q50 58 56 53" stroke="#3DE8FF" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <rect x="34" y="74" width="32" height="24" rx="11" fill="#0D1428" stroke="#3A4A75" stroke-width="2"/>
+              <rect x="44" y="80" width="12" height="8" rx="3" fill="#9D6BFF" opacity=".85"/>
+              <line x1="34" y1="82" x2="20" y2="72" stroke="#3A4A75" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="19" cy="71" r="4" fill="#3DE8FF"/>
+              <line x1="66" y1="82" x2="79" y2="88" stroke="#3A4A75" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="80" cy="89" r="4" fill="#9D6BFF"/>
+            </g>
+          </svg>
+        </div>
+        <div class="eg-card-content">
+          <p class="eg-greet">Hi, I'm <b>{{ $settings['first_name'] }}'s</b> AI Assistant 👋</p>
+          <p class="eg-desc">{{ $settings['intro_pitch'] ?? 'Your personal guide to explore everything about my experience, skills, and journey.' }}</p>
+        </div>
+      </div>
+
+      <div class="eg-actions">
+        <button id="enterBtn" type="button" class="eg-action-btn primary"><span>🚀 START AI TOUR</span><small>See how AI can help you</small></button>
+      </div>
+
       <div class="eg-hint">Voice is optional. Use Skip Intro to open the portfolio directly.</div>
     </div>
   </div>
@@ -556,7 +652,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
       <div class="scan-ring" id="scanRing"></div>
     </div>
     <div class="console" id="console" aria-live="polite">
-      <div class="console-tag"><i></i>A.R.I.A. — AI COMMAND CENTER GUIDE <span class="wave"><i></i><i></i><i></i><i></i></span></div>
+      <div class="console-tag"><i></i>{{ $settings['first_name'] }}'S ASSISTANT — AI COMMAND CENTER GUIDE <span class="wave"><i></i><i></i><i></i><i></i></span></div>
       <div id="sayPrev"></div>
       <div id="sayNow"></div>
     </div>
@@ -614,7 +710,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   <p class="hero-quote" data-reveal>{!! $settings['tagline'] !!}</p>
   <div class="hero-ctas" data-reveal>
     <a class="btn btn-go" href="#profile" data-magnetic>{{ $settings['hero_cta_primary'] }}</a>
-    <a class="btn btn-line" href="#contact" data-magnetic>{{ $settings['hero_cta_secondary'] }}</a>
+    <a class="btn btn-line" href="#contact" data-magnetic data-track="contact_click">{{ $settings['hero_cta_secondary'] }}</a>
   </div>
   @foreach(array_slice(array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $settings['hero_chips'])))), 0, 4) as $ci => $chip)
   <div class="holo-chip hc-{{ $ci + 1 }}" data-float>{!! $chip !!}</div>
@@ -745,9 +841,9 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
       <h2 class="sec-title" data-reveal>{!! $settings['ach_title'] !!}<br><span class="g">{!! $settings['ach_title_hl'] !!}</span></h2>
     </div>
     <div class="terminal glass" data-reveal><div class="spot"></div>
-      <div class="term-bar"><i></i><i></i><i></i><span>aria@command-center: ~/achievements</span></div>
+      <div class="term-bar"><i></i><i></i><i></i><span>{{ strtolower($settings['first_name']) }}@command-center: ~/achievements</span></div>
       <div class="term-body">
-        <span class="q">aria></span> SELECT * FROM achievements WHERE subject = '{{ strtolower(str_replace(' ', '_', $settings['name'])) }}';<br>
+        <span class="q">{{ strtolower($settings['first_name']) }}></span> SELECT * FROM achievements WHERE subject = '{{ strtolower(str_replace(' ', '_', $settings['name'])) }}';<br>
         <span class="dim">→ {{ $achievements->count() }} rows returned in 0.002s · all records verified ✓</span>
       </div>
       <div class="ach-rows">
@@ -774,7 +870,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
       <div class="cmd-left">
         <h3>{{ $settings['contact_heading'] }}</h3>
         <p>{{ $settings['contact_text'] }}</p>
-        <div class="ai-line">A.R.I.A.: <b>"{{ $settings['contact_ai_1'] }}"</b><br>"{{ $settings['contact_ai_2'] }}"</div>
+        <div class="ai-line">{{ $settings['first_name'] }}'s Assistant: <b>"{{ $settings['contact_ai_1'] }}"</b><br>"{{ $settings['contact_ai_2'] }}"</div>
         <div class="cmd-stats">
           <div class="cmd-stat"><b>RESPONSE TIME</b>{{ $settings['response_time'] }}</div>
           <div class="cmd-stat"><b>TIMEZONE</b>{{ $settings['timezone'] }}</div>
@@ -790,13 +886,20 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
             <span class="ic"><svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.2 8h4.6v14H.2V8zm7.5 0h4.4v1.9h.1c.6-1.1 2.1-2.3 4.3-2.3 4.6 0 5.5 3 5.5 7V22h-4.6v-6.6c0-1.6 0-3.6-2.2-3.6s-2.6 1.7-2.6 3.5V22H7.7V8z"/></svg></span>
             {{ $settings['linkedin_label'] }}
           </a>
-          <a class="cmd-link" href="{{ route('resume.download') }}" id="resumeBtn">
+          <a class="cmd-link" href="{{ route('resume.download') }}" id="resumeBtn" data-track="resume_click">
             <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v10.6l3.3-3.3 1.4 1.4L12 17.4l-4.7-4.7 1.4-1.4 3.3 3.3V3h2zM4 19h16v2H4v-2z"/></svg></span>
             {{ $settings['resume_label'] }}
           </a>
+          @if(!empty($settings['whatsapp_number']))
+          <a class="cmd-link" href="https://wa.me/{{ preg_replace('/\D/', '', $settings['whatsapp_number']) }}?text={{ urlencode('Hi ' . $settings['first_name'] . ', I found your portfolio and would like to connect.') }}" target="_blank" rel="noopener" data-track="whatsapp_click">
+            <span class="ic"><svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.3-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5s-.6-1.5-.8-2c-.2-.5-.4-.4-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.3a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.3 8.3 0 1 1 12 20.3z"/></svg></span>
+            {{ $settings['whatsapp_label'] }}
+          </a>
+          @endif
         </div>
       </div>
       <form class="cmd-form" id="cmdForm" novalidate>
+        <div style="position:absolute;left:-9999px;top:-9999px" aria-hidden="true"><input id="cHpCheck" name="hp_check" type="text" tabindex="-1" autocomplete="off"></div>
         <div class="fld"><input id="cName" name="name" type="text" placeholder=" " autocomplete="name" required><label for="cName">{{ $settings['contact_label_name'] }}</label></div>
         <div class="fld"><input id="cEmail" name="email" type="email" placeholder=" " autocomplete="email" required><label for="cEmail">{{ $settings['contact_label_email'] }}</label></div>
         <div class="fld"><textarea id="cMsg" name="message" placeholder=" " required></textarea><label for="cMsg">{{ $settings['contact_label_message'] }}</label></div>
@@ -849,7 +952,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   </div>
 </div>
 
-<div id="bot" aria-label="AI assistant A.R.I.A." role="img">
+<div id="bot" aria-label="AI assistant — {{ $settings['first_name'] }}'s Assistant" role="img">
   <svg viewBox="0 0 100 110">
     <g id="botBody">
       <line x1="50" y1="14" x2="50" y2="4" stroke="#8C97B4" stroke-width="2"/>
@@ -875,7 +978,20 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   </svg>
 </div>
 <div id="bubble"></div>
-<button id="voiceToggle" aria-pressed="true" title="Toggle A.R.I.A. voice"><span id="voiceIco">🔊</span> <span id="voiceTxt">VOICE</span></button>
+<button id="botChatToggle" type="button" aria-label="Chat with {{ $settings['first_name'] }}'s Assistant">🤖 Ask My AI</button>
+<div id="botChat" aria-label="AI assistant chat">
+  <div id="botChatHead">
+    <span>{{ $settings['first_name'] }}'s Assistant</span>
+    <button type="button" id="botChatClose" aria-label="Close chat">✕</button>
+  </div>
+  <div id="botChatLog"></div>
+  <form id="botChatForm" autocomplete="off">
+    <button type="button" id="botChatMic" aria-label="Ask by voice">🎤</button>
+    <input id="botChatInput" type="text" placeholder="Ask about skills, experience, availability…" maxlength="500" autocomplete="off">
+    <button type="submit" aria-label="Send">➤</button>
+  </form>
+</div>
+<button id="voiceToggle" aria-pressed="true" title="Toggle assistant voice"><span id="voiceIco">🔊</span> <span id="voiceTxt">VOICE</span></button>
 
 <footer>
   <div class="foot">
@@ -896,6 +1012,8 @@ const SUBJ_LAST=@json(strtoupper($settings['last_name']));
 const SUBJ_FULL=SUBJ_FIRST+" "+SUBJ_LAST;
 const SUBJ_ROLE=@json(strtoupper($settings['designation'] ?? ''));
 const CONTACT_URL=@json(route('contact.store'));
+const INTERACTIONS_URL=@json(route('interactions.track'));
+const CHAT_URL=@json(route('assistant.chat'));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
 const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
@@ -1165,7 +1283,7 @@ function botMouthStop(){
   if(hasGSAP&&!reduced){gsap.to(m,{opacity:0,attr:{ry:0.5},duration:.15});gsap.to(s,{opacity:1,duration:.25,delay:.05});}
   else{m.setAttribute('opacity','0');if(s)s.setAttribute('opacity','1');}
 }
-/* ---- intro hologram "talking" action (pulses while A.R.I.A. narrates) ---- */
+/* ---- intro hologram "talking" action (pulses while the assistant narrates) ---- */
 let holoTalkTl=null;
 function holoTalkStart(){
   if(!hasGSAP||reduced)return;
@@ -1682,7 +1800,7 @@ document.querySelectorAll('[data-ach]').forEach((b,i)=>{
 const bot=document.getElementById('bot'),bubble=document.getElementById('bubble');
 const pupils=document.getElementById('pupils');
 const SAY=@json(array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $settings['assistant_lines'])))));
-let lastSaid=-1,bubbleTimer=null,botVisible=false,idleTimer=null;
+let lastSaid=-1,bubbleTimer=null,botVisible=false,idleTimer=null,suppressBotSay=false;
 function botShow(instant){
   botVisible=true;
   if(hasGSAP&&!reduced&&!instant){
@@ -1692,7 +1810,7 @@ function botShow(instant){
   botSay(0,true);resetIdle();
 }
 function botSay(idx,force){
-  if(!botVisible||(idx===lastSaid&&!force))return;
+  if(!botVisible||suppressBotSay||(idx===lastSaid&&!force))return;
   lastSaid=idx;botFreeSay(SAY[idx]||'');
 }
 function botFreeSay(html){
@@ -1725,13 +1843,137 @@ if(fine&&!reduced){
     pupils.style.transform=`translate(${dx2*7}px, ${dy2*6}px)`;
   },{passive:true});
 }
-bot.addEventListener('click',()=>{botCelebrate();botFreeSay(@json($settings['assistant_click']));});
 document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($settings['assistant_focus'])),{once:true});
+
+/* real AI chat — clicking the bot itself is the single entry point */
+(function(){
+  const panel=document.getElementById('botChat');
+  const log=document.getElementById('botChatLog');
+  const form=document.getElementById('botChatForm');
+  const input=document.getElementById('botChatInput');
+  const mic=document.getElementById('botChatMic');
+  const closeBtn=document.getElementById('botChatClose');
+  const toggleBtn=document.getElementById('botChatToggle');
+  let chatHistory=[];
+
+  function openPanel(){
+    panel.classList.add('show');
+    toggleBtn.classList.add('hide');
+    input.focus();
+    if(!log.children.length){
+      const greeting=@json("I'm " . $settings['first_name'] . "'s assistant. How may I help you?");
+      addMsg('assistant',greeting);
+      speak(greeting,{bot:true});
+    }
+  }
+  function closePanel(){
+    panel.classList.remove('show');
+    toggleBtn.classList.remove('hide');
+  }
+  closeBtn.addEventListener('click',closePanel);
+  toggleBtn.addEventListener('click',openPanel);
+
+  /* voice input — reuses the same language setting as the bot's voice output */
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(SR){
+    const recognizer=new SR();
+    recognizer.lang=VOICE_LANG;
+    recognizer.interimResults=false;
+    recognizer.maxAlternatives=1;
+    let listening=false;
+    mic.addEventListener('click',()=>{
+      if(listening){recognizer.stop();return;}
+      try{recognizer.start();}catch(e){}
+    });
+    recognizer.onstart=()=>{listening=true;mic.classList.add('listening');};
+    recognizer.onend=()=>{listening=false;mic.classList.remove('listening');};
+    recognizer.onerror=()=>{listening=false;mic.classList.remove('listening');};
+    recognizer.onresult=e=>{
+      const heard=e.results[0][0].transcript;
+      if(heard&&!input.disabled){input.value=heard;form.requestSubmit();}
+    };
+  }else{
+    mic.hidden=true;
+  }
+
+  function addMsg(role,text){
+    const div=document.createElement('div');
+    div.className='msg '+role;
+    div.textContent=text;
+    log.appendChild(div);
+    log.scrollTop=log.scrollHeight;
+  }
+
+  bot.addEventListener('click',()=>{
+    botCelebrate();
+    if(panel.classList.contains('show'))closePanel();else openPanel();
+  });
+
+  form.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const question=input.value.trim();
+    if(!question)return;
+    addMsg('user',question);
+    input.value='';
+    input.disabled=true;
+    try{
+      const res=await fetch(CHAT_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','Accept':'application/json',
+          'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
+        body:JSON.stringify({question,history:chatHistory.slice(-8)})
+      });
+      const data=await res.json();
+      const answer=data.answer||"Signal interference — try the contact form below.";
+      addMsg('assistant',answer);
+      chatHistory.push({role:'user',content:question},{role:'assistant',content:answer});
+
+      const segments=(data.segments||[]).filter(s=>s&&s.text);
+      if(segments.length){
+        suppressBotSay=true;
+        let focused=null;
+        function clearFocus(){if(focused){focused.classList.remove('ai-focus');focused=null;}}
+        function playSegment(i){
+          if(i>=segments.length){clearFocus();suppressBotSay=false;return;}
+          const seg=segments[i];
+          clearFocus();
+          if(seg.section){
+            const el=document.getElementById(seg.section);
+            if(el){el.classList.add('ai-focus');focused=el;el.scrollIntoView({behavior:'smooth',block:'start'});}
+          }
+          const goNext=()=>playSegment(i+1);
+          if(voiceOn)speak(seg.text,{bot:true,onend:goNext});
+          else setTimeout(goNext,Math.max(1500,seg.text.length*50));
+        }
+        playSegment(0);
+      }else{
+        speak(answer,{bot:true});
+      }
+    }catch(err){
+      addMsg('assistant',"Signal interference — try the contact form below.");
+    }finally{
+      input.disabled=false;
+      input.focus();
+    }
+  });
+})();
 
 /* resume */
 document.getElementById('resumeBtn').addEventListener('click',function(e){
   burstAt(e.clientX||innerWidth/2,e.clientY||innerHeight/2,['#3DE8FF','#54F0A8'],22);
   botFreeSay(@json($settings['assistant_resume']));
+});
+
+/* conversion tracking — fire-and-forget, never blocks the click */
+document.querySelectorAll('[data-track]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    fetch(INTERACTIONS_URL,{
+      method:'POST',keepalive:true,
+      headers:{'Content-Type':'application/json','Accept':'application/json',
+        'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
+      body:JSON.stringify({type:el.dataset.track})
+    }).catch(()=>{});
+  });
 });
 
 /* contact */
@@ -1746,7 +1988,7 @@ form.addEventListener('submit',async e=>{
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json',
         'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
-      body:JSON.stringify({name:form.name.value,email:form.email.value,message:form.message.value})
+      body:JSON.stringify({name:form.name.value,email:form.email.value,message:form.message.value,hp_check:form.hp_check.value})
     });
     if(!res.ok)throw 0;
     btn.classList.add('sent');

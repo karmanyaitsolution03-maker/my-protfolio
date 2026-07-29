@@ -491,7 +491,8 @@ main{position:relative;z-index:2}
 #botChatMic:hover{border-color:var(--line-hot)}
 #botChatMic.listening{background:rgba(255,107,157,.18);border-color:var(--rose,#FF6B9D);animation:pulse 1.2s infinite}
 #botChatMic[hidden]{display:none}
-@media(max-width:700px){#botChat{right:8px;bottom:8px;left:8px;width:auto;height:min(70vh,520px)}}
+@media(max-width:700px){#botChat{right:8px;bottom:8px;left:8px;width:auto;height:min(70vh,520px)}
+  body.chat-open #voiceToggle{display:none}}
 
 footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px clamp(20px,4vw,40px)}
 .foot{max-width:1120px;margin:0 auto;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--faint)}
@@ -1859,6 +1860,7 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
   function openPanel(){
     panel.classList.add('show');
     toggleBtn.classList.add('hide');
+    document.body.classList.add('chat-open');
     input.focus();
     if(!log.children.length){
       const greeting=@json("I'm " . $settings['first_name'] . "'s assistant. How may I help you?");
@@ -1869,6 +1871,7 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
   function closePanel(){
     panel.classList.remove('show');
     toggleBtn.classList.remove('hide');
+    document.body.classList.remove('chat-open');
   }
   closeBtn.addEventListener('click',closePanel);
   toggleBtn.addEventListener('click',openPanel);

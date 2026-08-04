@@ -13,6 +13,7 @@ Route::get('/resume', [PortfolioController::class, 'resume'])->name('resume.down
 Route::post('/contact', [ContactController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
 Route::post('/interactions', [InteractionController::class, 'track'])->middleware('throttle:20,1')->name('interactions.track');
 Route::post('/assistant/chat', [AssistantController::class, 'chat'])->middleware('throttle:10,1')->name('assistant.chat');
+Route::post('/assistant/speak', [AssistantController::class, 'speak'])->middleware('throttle:40,1')->name('assistant.speak');
 
 /* ---------- sitemap ---------- */
 Route::get('/sitemap.xml', function (\Illuminate\Http\Request $request) {

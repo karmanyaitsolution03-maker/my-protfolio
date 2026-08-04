@@ -195,6 +195,7 @@ class AdminController extends Controller
         $request->validate([
             'settings.resume_file' => 'nullable|file|mimes:pdf|max:10240',
             'settings.og_image'    => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
+            'settings.photo'       => 'nullable|image|mimes:jpeg,jpg,png,webp|max:5120',
         ]);
 
         foreach ((array) $request->input('settings', []) as $key => $value) {
@@ -203,7 +204,11 @@ class AdminController extends Controller
 
         foreach ((array) $request->file('settings', []) as $key => $file) {
             if ($file && $file->isValid()) {
-                $folder = $key === 'og_image' ? 'og-images' : 'resumes';
+                $folder = match ($key) {
+                    'og_image' => 'og-images',
+                    'photo'    => 'profile',
+                    default    => 'resumes',
+                };
                 $path = $file->storeAs($folder, $key . '.' . $file->getClientOriginalExtension(), 'public');
                 Setting::updateOrCreate(['key' => $key], ['value' => $path]);
             }

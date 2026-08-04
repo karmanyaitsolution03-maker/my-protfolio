@@ -21,7 +21,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Orbitron:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ============================= TOKENS ============================= */
 :root{
@@ -90,9 +90,55 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .intro-frame:before{top:-1px;left:-1px;border-width:2px 0 0 2px}
 .intro-frame:after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
 #introStage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;z-index:5}
-.boot{font-family:var(--mono);font-size:clamp(11px,1.3vw,13.5px);line-height:2.15;color:var(--muted);width:min(560px,86vw)}
+#introGrid{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.55;
+  background:
+    linear-gradient(rgba(61,232,255,.08) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(61,232,255,.08) 1px,transparent 1px);
+  background-size:72px 72px;
+  -webkit-mask-image:radial-gradient(circle at 50% 42%,#000 0 38%,transparent 76%);
+  mask-image:radial-gradient(circle at 50% 42%,#000 0 38%,transparent 76%);
+  animation:egGrid 12s linear infinite}
+.boot-panel{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;width:min(620px,90vw);
+  border:1px solid var(--line-hot);border-radius:18px;
+  background:rgba(5,9,20,.72);backdrop-filter:blur(14px);
+  box-shadow:0 24px 70px rgba(0,0,0,.6),0 0 44px rgba(61,232,255,.1),inset 0 1px 0 rgba(255,255,255,.05);
+  padding:clamp(20px,3vw,30px)}
+#introParticles{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#introParticles .dot{position:absolute;bottom:-8%;border-radius:50%;opacity:0;box-shadow:0 0 12px currentColor;
+  animation:introFloat linear infinite}
+@keyframes introFloat{0%{transform:translateY(0) scale(.6);opacity:0}12%{opacity:.85}88%{opacity:.4}100%{transform:translateY(-112vh) scale(1);opacity:0}}
+#introParticles .icon-wrap{position:absolute;bottom:-8%;opacity:0;line-height:1;animation:introFloat linear infinite}
+#introParticles .icon-wrap.rocket{animation:rocketFloat linear infinite}
+@keyframes rocketFloat{0%{transform:translate(0,0) scale(.7) rotate(-10deg);opacity:0}
+  10%{opacity:.9}50%{transform:translate(16px,-56vh) scale(.9) rotate(-10deg)}
+  88%{opacity:.55}100%{transform:translate(-12px,-114vh) scale(1) rotate(-10deg);opacity:0}}
+#introParticles .icon{display:inline-block;filter:drop-shadow(0 0 7px rgba(61,232,255,.55))}
+#introParticles .icon.spin{animation:gearSpin 4s linear infinite}
+@keyframes gearSpin{to{transform:rotate(360deg)}}
+.ai-core{position:relative;width:88px;height:88px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center}
+.ai-core-glow{position:absolute;inset:14px;border-radius:50%;background:radial-gradient(circle,rgba(61,232,255,.55),transparent 70%);
+  filter:blur(11px);animation:aiCorePulse 1.8s ease-in-out infinite}
+@keyframes aiCorePulse{0%,100%{opacity:.55;transform:scale(.88)}50%{opacity:1;transform:scale(1.18)}}
+.ai-core-ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed rgba(61,232,255,.5)}
+.ai-core-ring.r1{animation:aiCoreSpin 6s linear infinite}
+.ai-core-ring.r2{inset:11px;border-color:rgba(157,107,255,.45);animation:aiCoreSpin 4.2s linear infinite reverse}
+@keyframes aiCoreSpin{to{transform:rotate(360deg)}}
+.ai-core-dot{position:absolute;top:50%;left:50%;width:7px;height:7px;margin:-3.5px;border-radius:50%;
+  background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:aiCoreOrbit 2.6s linear infinite}
+.ai-core-dot.d2{background:#9D6BFF;box-shadow:0 0 10px #9D6BFF;animation-duration:3.8s;animation-direction:reverse}
+@keyframes aiCoreOrbit{from{transform:rotate(0deg) translateX(38px) rotate(0deg)}to{transform:rotate(360deg) translateX(38px) rotate(-360deg)}}
+.ai-core-icon{position:relative;z-index:1;width:26px;height:26px;color:var(--cyan);filter:drop-shadow(0 0 6px rgba(61,232,255,.6))}
+.boot-panel-tag{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:var(--cyan);margin-bottom:16px}
+.boot-panel-tag i{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 1.1s infinite}
+.boot{font-family:var(--mono);font-size:clamp(11px,1.3vw,13.5px);line-height:2.15;color:var(--muted);width:100%}
 .boot .ln{display:flex;justify-content:space-between;gap:16px;opacity:0}
 .boot .ln em{font-style:normal;color:var(--green)}
+.boot-progress{margin-top:18px;height:6px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}
+.boot-progress i{display:block;height:100%;width:0%;border-radius:999px;background:var(--grad);
+  box-shadow:0 0 16px rgba(61,232,255,.55);transition:width .4s var(--ease)}
+.boot-progress-label{display:flex;justify-content:space-between;margin-top:9px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--faint)}
+.boot-progress-label b{color:var(--cyan);font-weight:600}
+@media(max-width:640px){.boot-panel{padding:20px}}
 .boot .sys{color:var(--cyan)}
 #holoWrap{position:relative;width:min(230px,50vw);opacity:0;filter:drop-shadow(0 0 30px rgba(61,232,255,.35))}
 #holoWrap.assembled{animation:holoIdle 4s ease-in-out infinite}
@@ -166,7 +212,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 @keyframes egFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
 .eg-box{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px}
 .eg-tag{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--cyan);border:1px solid var(--line);border-radius:6px;padding:6px 16px;margin-bottom:6px}
-.eg-title{font-family:var(--display,sans-serif);font-weight:700;font-size:clamp(38px,7.2vw,76px);letter-spacing:.06em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 50px rgba(61,232,255,.18)}
+.eg-title{font-family:'Orbitron',var(--display,sans-serif);font-weight:800;font-size:clamp(34px,6.6vw,68px);letter-spacing:.04em;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 50px rgba(61,232,255,.18)}
 .eg-sub{font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--text);text-transform:uppercase;margin-bottom:8px}
 .eg-card-main{display:flex;align-items:center;gap:24px;text-align:left;background:rgba(10,16,32,.6);
   border:1px solid var(--line-hot);border-radius:22px;padding:26px 32px;max-width:640px;width:100%;
@@ -266,7 +312,28 @@ main{position:relative;z-index:2}
 .pb-tile b{display:block;color:var(--cyan);font-size:11px;margin-bottom:4px}.pb-tile span{color:var(--green)}
 .pb1{left:5%;top:28%}.pb2{right:6%;top:34%}.pb3{left:9%;bottom:22%}.pb4{right:10%;bottom:20%}
 .hero-coord{font-family:var(--mono);font-size:11.5px;letter-spacing:.3em;color:var(--faint);margin-bottom:26px}
-.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(48px,9.5vw,118px);line-height:.98;letter-spacing:0;text-shadow:0 0 80px rgba(77,124,254,.35)}
+.hero-photo{position:relative;width:236px;height:236px;margin:0 auto 46px}
+.hero-photo-ring{position:absolute;inset:-16px;border-radius:36px;z-index:-1;opacity:.6;filter:blur(20px);
+  background:conic-gradient(from 0deg,var(--cyan),#9D6BFF,var(--green),var(--cyan));animation:heroPhotoSpin 10s linear infinite}
+@keyframes heroPhotoSpin{to{transform:rotate(360deg)}}
+.hero-photo-frame{position:relative;width:100%;height:100%;border-radius:28px;overflow:hidden;
+  border:2px solid var(--line-hot);background:rgba(6,10,22,.6);
+  box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 40px rgba(61,232,255,.18),inset 0 0 0 1px rgba(255,255,255,.06)}
+.hero-photo-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-photo-frame .shimmer{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 35%,rgba(61,232,255,.16) 50%,transparent 65%);
+  background-size:240% 100%;animation:shim 3.6s ease-in-out infinite}
+.hero-photo-corner{position:absolute;width:24px;height:24px;border:2px solid var(--cyan);opacity:.95;pointer-events:none}
+.hero-photo-corner.tl{top:-9px;left:-9px;border-right:none;border-bottom:none;border-radius:12px 0 0 0}
+.hero-photo-corner.tr{top:-9px;right:-9px;border-left:none;border-bottom:none;border-radius:0 12px 0 0}
+.hero-photo-corner.bl{bottom:-9px;left:-9px;border-right:none;border-top:none;border-radius:0 0 0 12px}
+.hero-photo-corner.br{bottom:-9px;right:-9px;border-left:none;border-top:none;border-radius:0 0 12px 0}
+.hero-photo-tag{position:absolute;left:50%;bottom:-16px;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.28em;color:var(--cyan);
+  background:rgba(6,10,22,.92);border:1px solid var(--line-hot);border-radius:999px;padding:6px 16px;
+  box-shadow:0 10px 24px rgba(0,0,0,.45)}
+@media(max-width:700px){.hero-photo{width:158px;height:158px;margin-bottom:40px}.hero-photo-ring{inset:-10px}.hero-photo-corner{width:18px;height:18px}}
+.hero h1{font-family:'Orbitron',var(--display);font-weight:800;font-size:clamp(42px,8.6vw,106px);line-height:1.04;letter-spacing:.02em;text-shadow:0 0 80px rgba(77,124,254,.35)}
 .hero h1 .row{display:block;overflow:hidden}
 .hero h1 .row>span{display:inline-block}
 .hero h1 .g{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -483,6 +550,11 @@ main{position:relative;z-index:2}
 #botChatLog .msg{font-size:12.5px;line-height:1.5;padding:8px 11px;border-radius:10px;max-width:88%}
 #botChatLog .msg.user{align-self:flex-end;background:rgba(61,232,255,.14);color:var(--text)}
 #botChatLog .msg.assistant{align-self:flex-start;background:rgba(255,255,255,.05);color:var(--muted)}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px;flex:none}
+.chat-suggestions.hide{display:none}
+.chat-suggestions .chip{background:rgba(61,232,255,.07);border:1px solid var(--line);border-radius:999px;padding:6px 12px;
+  font-size:11.5px;line-height:1.3;color:var(--cyan);cursor:pointer;transition:.2s;text-align:left}
+.chat-suggestions .chip:hover{border-color:var(--line-hot);background:rgba(61,232,255,.14);color:var(--text)}
 #botChatForm{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);flex:none}
 #botChatForm input{flex:1;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:9px;padding:9px 11px;color:var(--text);font-size:12.5px}
 #botChatForm input:focus{outline:none;border-color:var(--line-hot)}
@@ -502,7 +574,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
 /* ============================= PHONE (≤560px) ============================= */
 @media(max-width:560px){
   body{font-size:15px}
-  #introStage{justify-content:flex-start;gap:14px;overflow-y:auto;padding:42px 18px 104px}
+  #introStage{justify-content:center;gap:14px;overflow-y:auto;padding:42px 18px 104px}
   #holoWrap{width:min(190px,58vw)}
   .console{width:100%;padding:16px 18px;border-radius:14px;overflow:hidden}
   .console-tag{align-items:flex-start;font-size:8.5px;letter-spacing:.28em;line-height:1.55}
@@ -617,8 +689,27 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   <div id="scanBeam" aria-hidden="true"></div>
   <div id="coreRing" aria-hidden="true"></div>
 
+  <div id="introGrid" aria-hidden="true"></div>
+  <div id="introParticles" aria-hidden="true"></div>
   <div id="introStage">
-    <div class="boot" id="boot" aria-live="polite"></div>
+    <div class="boot-panel" id="bootPanel">
+      <div class="ai-core" aria-hidden="true">
+        <div class="ai-core-ring r1"></div>
+        <div class="ai-core-ring r2"></div>
+        <div class="ai-core-glow"></div>
+        <div class="ai-core-dot d1"></div>
+        <div class="ai-core-dot d2"></div>
+        <svg class="ai-core-icon" viewBox="0 0 24 24" fill="none">
+          <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+          <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="boot-panel-tag"><i></i>SYSTEM BOOT SEQUENCE</div>
+      <div class="boot" id="boot" aria-live="polite"></div>
+      <div class="boot-progress"><i id="bootBar"></i></div>
+      <div class="boot-progress-label"><span>INITIALIZING…</span><b id="bootPct">0%</b></div>
+    </div>
     <div id="holoWrap" aria-hidden="true">
       <svg id="holo" viewBox="0 0 100 116">
         <g opacity=".96">
@@ -703,6 +794,20 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
     <div class="pb-tile pb4"><b>Support</b>Debug / deploy / deliver<br><span>stable</span> releases</div>
   </div>
   <div class="hero-coord" data-reveal>{{ $settings['hero_coord'] }}</div>
+  @if(!empty($settings['photo']))
+  <div class="hero-photo" data-reveal>
+    <div class="hero-photo-ring" aria-hidden="true"></div>
+    <div class="hero-photo-frame">
+      <img src="{{ asset('storage/' . $settings['photo']) }}" alt="{{ $settings['name'] }}">
+      <div class="shimmer" aria-hidden="true"></div>
+      <span class="hero-photo-corner tl" aria-hidden="true"></span>
+      <span class="hero-photo-corner tr" aria-hidden="true"></span>
+      <span class="hero-photo-corner bl" aria-hidden="true"></span>
+      <span class="hero-photo-corner br" aria-hidden="true"></span>
+    </div>
+    <div class="hero-photo-tag">VERIFIED SUBJECT</div>
+  </div>
+  @endif
   <h1 aria-label="{{ $settings['name'] }}">
     <span class="row"><span data-hline>{{ strtoupper($settings['first_name']) }}</span></span>
     <span class="row"><span data-hline class="g">{{ strtoupper($settings['last_name']) }}</span></span>
@@ -986,6 +1091,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
     <button type="button" id="botChatClose" aria-label="Close chat">✕</button>
   </div>
   <div id="botChatLog"></div>
+  <div id="botChatSuggestions" class="chat-suggestions" aria-label="Suggested questions"></div>
   <form id="botChatForm" autocomplete="off">
     <button type="button" id="botChatMic" aria-label="Ask by voice">🎤</button>
     <input id="botChatInput" type="text" placeholder="Ask about skills, experience, availability…" maxlength="500" autocomplete="off">
@@ -1015,8 +1121,43 @@ const SUBJ_ROLE=@json(strtoupper($settings['designation'] ?? ''));
 const CONTACT_URL=@json(route('contact.store'));
 const INTERACTIONS_URL=@json(route('interactions.track'));
 const CHAT_URL=@json(route('assistant.chat'));
+const TTS_URL=@json(route('assistant.speak'));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+/* ambient floating particles + drifting rocket/gear icons behind the intro */
+(function(){
+  const box=document.getElementById('introParticles');
+  if(!box||reduced)return;
+  const colors=['#3DE8FF','#9D6BFF','#54F0A8'];
+  for(let i=0;i<16;i++){
+    const p=document.createElement('span');
+    p.className='dot';
+    const size=2+Math.random()*3;
+    p.style.left=Math.random()*100+'%';
+    p.style.width=p.style.height=size+'px';
+    const c=colors[i%colors.length];
+    p.style.background=c;p.style.color=c;
+    p.style.animationDuration=(9+Math.random()*10)+'s';
+    p.style.animationDelay=(-Math.random()*16)+'s';
+    box.appendChild(p);
+  }
+  const icons=[{glyph:'🚀',cls:'rocket'},{glyph:'⚙️',cls:'gear'}];
+  for(let i=0;i<6;i++){
+    const def=icons[i%icons.length];
+    const wrap=document.createElement('span');
+    wrap.className='icon-wrap'+(def.cls==='rocket'?' rocket':'');
+    wrap.style.left=Math.random()*100+'%';
+    wrap.style.animationDuration=(11+Math.random()*10)+'s';
+    wrap.style.animationDelay=(-Math.random()*18)+'s';
+    const icon=document.createElement('span');
+    icon.className='icon'+(def.cls==='gear'?' spin':'');
+    icon.textContent=def.glyph;
+    icon.style.fontSize=(14+Math.random()*8)+'px';
+    wrap.appendChild(icon);
+    box.appendChild(wrap);
+  }
+})();
 const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
 const isMobile = innerWidth < 760;
@@ -1084,127 +1225,14 @@ const warpCv=document.getElementById('warp');
 let introDone=false, introTimers=[];
 function later(fn,ms){const t=setTimeout(()=>{if(!introDone)fn();},ms);introTimers.push(t);return t;}
 
-/* ---------- ROBOT SOUND (Web Audio synth) ----------
-   Synthesised sci-fi chatter that plays UNDER the spoken line. Unlike the
-   speech engine — which Chrome silently drops when invoked a few seconds
-   after the last gesture, and which is mute on machines with no TTS voice —
-   Web Audio keeps working once unlocked, so the bot is always audibly "alive". */
-const RobotSfx=(function(){
-  let ctx=null,master=null,chatterTimer=null,currentGen=0;
-  function ensure(){
-    if(ctx)return ctx;
-    try{
-      const AC=window.AudioContext||window.webkitAudioContext;
-      if(!AC)return null;
-      ctx=new AC();
-      master=ctx.createGain();master.gain.value=.9;master.connect(ctx.destination);
-    }catch(e){ctx=null;}
-    return ctx;
-  }
-  function unlock(){ensure();if(ctx&&ctx.state==='suspended')ctx.resume().catch(()=>{});}
-  // one short robotic blip ("phoneme") starting at time t
-  function blip(t,freq,dur){
-    const o=ctx.createOscillator(),g=ctx.createGain(),f=ctx.createBiquadFilter();
-    o.type=Math.random()<.5?'square':'sawtooth';
-    o.frequency.setValueAtTime(freq,t);
-    o.frequency.linearRampToValueAtTime(freq*(.8+Math.random()*.5),t+dur);
-    f.type='bandpass';f.frequency.value=freq*2.2;f.Q.value=7;
-    g.gain.setValueAtTime(0,t);
-    g.gain.linearRampToValueAtTime(.05,t+.012);
-    g.gain.exponentialRampToValueAtTime(.0005,t+dur);
-    o.connect(f);f.connect(g);g.connect(master);
-    o.start(t);o.stop(t+dur+.03);
-  }
-  // deep, male-leaning robot range
-  const BANK=[150,138,168,128,180,144];
-  function startChatter(){
-    if(!ensure())return null;
-    if(ctx.state==='suspended')ctx.resume().catch(()=>{});
-    if(chatterTimer){clearTimeout(chatterTimer);chatterTimer=null;}
-    const my=++currentGen;
-    (function loop(){
-      if(my!==currentGen)return;            // superseded by a newer line
-      const now=ctx.currentTime,n=2+Math.floor(Math.random()*3);
-      let t=now;
-      for(let i=0;i<n;i++){
-        const fr=BANK[Math.floor(Math.random()*BANK.length)]*(.9+Math.random()*.45);
-        const d=.05+Math.random()*.06;
-        blip(t,fr,d);t+=d+.02+Math.random()*.03;
-      }
-      chatterTimer=setTimeout(loop,(t-now)*1000+110+Math.random()*170);
-    })();
-    return my;
-  }
-  function stopChatter(gen){
-    if(gen!=null&&gen!==currentGen)return;   // stale stop from a previous line — ignore
-    currentGen++;                            // halts any running loop on its next tick
-    if(chatterTimer){clearTimeout(chatterTimer);chatterTimer=null;}
-  }
-  return {unlock,startChatter,stopChatter};
-})();
-
-/* ---------- meSpeak — eSpeak compiled to JS: a TRUE robotic voice that
-   runs 100% in the browser (no server/API), works on dynamic text, and
-   sounds the same on every machine (unlike the OS Web-Speech voices). ---------- */
-const MESPEAK_BASE='https://cdn.jsdelivr.net/npm/mespeak@1.9.6/';   // browser-global build (exposes window.meSpeak)
-let meSpeakReady=false;
-(function loadMeSpeak(){
-  const s=document.createElement('script');
-  s.src=MESPEAK_BASE+'mespeak.min.js';
-  s.onload=function(){
-    try{
-      meSpeak.loadConfig(MESPEAK_BASE+'mespeak_config.json');
-      meSpeak.loadVoice(MESPEAK_BASE+'voices/en/en-us.json',function(ok){meSpeakReady=!!ok;});
-    }catch(e){meSpeakReady=false;}
-  };
-  s.onerror=function(){meSpeakReady=false;};   // CDN blocked → fall back to Web Speech API
-  document.head.appendChild(s);
-})();
-function meSpeakAvailable(){return meSpeakReady&&typeof window.meSpeak!=='undefined'&&meSpeak.isVoiceLoaded&&meSpeak.isVoiceLoaded();}
-// Prime meSpeak's audio inside a user gesture so it can play later (Chrome autoplay).
-function meSpeakPrime(){if(meSpeakAvailable()){try{meSpeak.speak(' ',{amplitude:0});}catch(e){}}}
-
-/* ---------- VOICE NARRATION (Web Speech API) ---------- */
-const canSpeak=('speechSynthesis' in window);
-const VOICE_LANG=@json($settings['intro_voice_lang'] ?: 'en-US');
-const VOICE_GENDER=@json(strtolower($settings['intro_voice_gender'] ?: 'male'));
-const VOICE_NAME=@json($settings['intro_voice_name'] ?? '');
-// voice is wanted purely from the setting — meSpeak can speak even when the OS has no Web-Speech voice
+/* ---------- VOICE NARRATION — OpenAI TTS only ----------
+   Every visitor hears the exact same "nova" voice, generated server-side as
+   MP3 (see AssistantController::speak / POST /assistant/speak) and cached by
+   text hash so repeated lines are never re-generated. No browser/OS voice
+   (speechSynthesis, SpeechSynthesisUtterance, getVoices) is used anywhere —
+   this is the only audio path, on every platform. */
+const VOICE_LANG=@json($settings['intro_voice_lang'] ?: 'en-US');   // used only for the mic's speech-to-text recognition language, below
 let voiceOn={{ ($settings['intro_voice'] ?? '1') !== '0' && $settings['intro_voice'] !== '' ? 'true' : 'false' }};
-let pickedVoice=null;
-// Heuristic gender match by voice name (the API doesn't expose gender directly).
-const MALE_RE=/\b(male|david|mark|guy|george|daniel|alex|fred|james|john|paul|ravi|rishi|prabhat|hemant|man)\b/i;
-const FEMALE_RE=/\b(female|zira|susan|hazel|samantha|victoria|karen|moira|tessa|fiona|heera|kalpana|swara|woman|girl)\b/i;
-function genderOf(v){
-  const n=(v.name||'');
-  if(FEMALE_RE.test(n))return 'female';
-  if(MALE_RE.test(n))return 'male';
-  return 'any';
-}
-function loadVoice(){
-  if(!canSpeak)return;
-  const vs=speechSynthesis.getVoices();
-  if(!vs.length){pickedVoice=null;return;}
-  const lc=VOICE_LANG.toLowerCase(), base=lc.split('-')[0];
-  // 1) exact name wins
-  if(VOICE_NAME){
-    const byName=vs.find(v=>v.name&&v.name.toLowerCase().includes(VOICE_NAME.toLowerCase()));
-    if(byName){pickedVoice=byName;return;}
-  }
-  const exact=vs.filter(v=>v.lang&&v.lang.toLowerCase()===lc);
-  const baseM=vs.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(base));
-  const enM=vs.filter(v=>/^en/i.test(v.lang));
-  // 2) try gender within progressively wider language pools
-  if(VOICE_GENDER==='male'||VOICE_GENDER==='female'){
-    for(const pool of [exact,baseM,enM,vs]){
-      const m=pool.find(v=>genderOf(v)===VOICE_GENDER);
-      if(m){pickedVoice=m;return;}
-    }
-  }
-  // 3) fall back to best language match
-  pickedVoice=exact[0]||baseM[0]||enM[0]||vs[0]||null;
-}
-if(canSpeak){loadVoice();speechSynthesis.onvoiceschanged=loadVoice;}
 const vBtn=document.getElementById('voiceToggle');
 function paintVoiceBtn(){
   if(!vBtn)return;
@@ -1213,51 +1241,83 @@ function paintVoiceBtn(){
   document.getElementById('voiceIco').textContent=voiceOn?'🔊':'🔇';
   document.getElementById('voiceTxt').textContent=voiceOn?'VOICE ON':'VOICE OFF';
 }
-function speak(text,opts){
+// One persistent <audio> element, unlocked once inside a user gesture (see
+// unlockAudio below) so later programmatic .play() calls work on iOS Safari.
+const ttsAudio=new Audio();
+ttsAudio.preload='auto';
+const ttsCache=new Map();   // text -> resolved MP3 url, avoids re-fetching a line already spoken this visit
+let speakGen=0;
+async function fetchTtsUrl(text){
+  if(ttsCache.has(text))return ttsCache.get(text);
+  try{
+    const res=await fetch(TTS_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json',
+        'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
+      body:JSON.stringify({text})
+    });
+    const data=await res.json();
+    const url=data.url||null;
+    if(url)ttsCache.set(text,url);
+    return url;
+  }catch(e){return null;}
+}
+async function speak(text,opts){
   opts=opts||{};
-  if(!voiceOn||!text){opts.onend&&opts.onend();return;}
-  // ---- preferred path: the device's own system voice (Siri on iOS, Google TTS on Android, etc.) ----
-  if(canSpeak){
-    if(!pickedVoice)loadVoice();
-    if(pickedVoice){
-      try{
-        if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
-        if(speechSynthesis.paused){try{speechSynthesis.resume();}catch(e){}}
-        const u=new SpeechSynthesisUtterance(text);
-        u.voice=pickedVoice;
-        u.lang=pickedVoice.lang||VOICE_LANG;
-        const malePitch=(VOICE_GENDER==='male'), basePitch=malePitch?0.8:1.05;
-        if(opts.bot||opts.intro){u.rate=1.02;u.pitch=malePitch?0.85:1.6;}   // male keeps it deep; female stays chirpy
-        else{u.rate=1;u.pitch=basePitch;}
-        u.volume=1;
-        // robotic sound layer — start NOW (don't wait for onstart, which Chrome may skip)
-        const chatter=RobotSfx.startChatter();
-        const stopBackstop=setTimeout(()=>RobotSfx.stopChatter(chatter),Math.min(15000,text.length*120+2500));
-        u.onstart=()=>vBtn&&vBtn.classList.add('speaking');
-        u.onend=u.onerror=()=>{clearTimeout(stopBackstop);RobotSfx.stopChatter(chatter);vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
-        speechSynthesis.speak(u);
-        return;
-      }catch(e){/* fall through to meSpeak */}
+  if(!voiceOn||!text){opts.onstart&&opts.onstart();opts.onend&&opts.onend();return;}
+  const myGen=++speakGen;
+  try{ttsAudio.pause();}catch(e){}
+  vBtn&&vBtn.classList.add('speaking');
+  // onstart fires exactly once — right as audio actually begins playing, so callers
+  // can reveal text / start mouth animation in sync with the voice rather than
+  // ahead of it (there's a network fetch before the MP3 is ready to play).
+  let started=false;
+  const doStart=()=>{if(started)return;started=true;opts.onstart&&opts.onstart();};
+  const finish=()=>{
+    if(myGen!==speakGen)return;   // superseded by a newer line — don't fire a stale onend
+    doStart();   // guarantee text still shows even if playback never started (e.g. TTS failed)
+    vBtn&&vBtn.classList.remove('speaking');
+    opts.onend&&opts.onend();
+  };
+  const url=await fetchTtsUrl(text);
+  if(myGen!==speakGen)return;     // a newer speak() call started while we were fetching
+  if(!url){finish();return;}
+  ttsAudio.src=url;
+  ttsAudio.onended=finish;
+  ttsAudio.onerror=finish;
+  try{
+    await ttsAudio.play();
+    if(myGen===speakGen)doStart();
+  }catch(e){finish();}
+}
+function stopSpeak(){
+  speakGen++;
+  try{ttsAudio.pause();}catch(e){}
+  holoTalkStop();
+  vBtn&&vBtn.classList.remove('speaking');
+}
+/* Autoplay policies (esp. iOS Safari) tie audio playback to a user gesture.
+   We "unlock" the single shared <audio> element once inside the first tap/
+   click/key — after that, later programmatic play() calls from async code
+   (fetch responses) are allowed on that same element. */
+const SILENT_WAV='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+let audioUnlocked=false;
+function unlockAudio(){
+  if(audioUnlocked)return; audioUnlocked=true;
+  ttsAudio.src=SILENT_WAV;
+  ttsAudio.play().then(()=>{ttsAudio.pause();ttsAudio.currentTime=0;}).catch(()=>{});
+}
+['pointerdown','keydown','touchstart','click'].forEach(ev=>addEventListener(ev,unlockAudio,{passive:true}));
+if(vBtn){
+  paintVoiceBtn();
+  vBtn.addEventListener('click',()=>{
+    voiceOn=!voiceOn;paintVoiceBtn();
+    if(!voiceOn){stopSpeak();botMouthStop();}
+    // Turning on: re-say the bot's current bubble (NOT the silent intro).
+    else if(botVisible&&bubble.classList.contains('show')&&bubble.textContent.trim()){
+      speak(bubble.textContent.trim(),{bot:true});botMouthStart();
     }
-  }
-  // ---- fallback: meSpeak (robotic eSpeak voice) — only when the OS has no Web-Speech voice at all ----
-  if(meSpeakAvailable()){
-    try{
-      meSpeak.stop();                                   // cut off any line still talking
-      if(canSpeak){try{speechSynthesis.cancel();}catch(e){}}
-      const male=(VOICE_GENDER!=='female');
-      // low pitch + slightly slow = that classic deep robot delivery
-      const o={amplitude:100,volume:1,pitch:male?22:60,speed:165,wordgap:1};
-      vBtn&&vBtn.classList.add('speaking');
-      let done=false;
-      const finish=()=>{if(done)return;done=true;vBtn&&vBtn.classList.remove('speaking');opts.onend&&opts.onend();};
-      meSpeak.speak(text,o,function(){finish();});       // callback fires when playback ends
-      return;
-    }catch(e){/* fall through to chatter-only */}
-  }
-  // neither a system voice nor meSpeak — keep the robot audible with chatter
-  const c=RobotSfx.startChatter();
-  setTimeout(()=>{RobotSfx.stopChatter(c);opts.onend&&opts.onend();},Math.min(9000,text.length*70+700));
+  });
 }
 /* ---- robot talking mouth (visual, runs whenever the bot says something) ---- */
 let botMouthTl=null;
@@ -1319,35 +1379,6 @@ function holoTalkStop(){
     gsap.to('#holo circle:first-of-type',{attr:{r:3.2},duration:.2});
   }
 }
-function stopSpeak(){if(meSpeakAvailable()){try{meSpeak.stop();}catch(e){}}if(canSpeak){try{speechSynthesis.cancel();}catch(e){}}RobotSfx.stopChatter();holoTalkStop();vBtn&&vBtn.classList.remove('speaking');}
-/* Browsers block speech until the FIRST user gesture. A plain resume() isn't
-   enough — we must call speak() inside a gesture once. So on the first tap /
-   click / key we fire a silent utterance to unlock the engine; after that the
-   bot speaks on its own (scroll, idle, etc.) with no need to toggle. */
-if(canSpeak){
-  let audioPrimed=false;
-  const primeAudio=()=>{
-    if(audioPrimed)return; audioPrimed=true;
-    RobotSfx.unlock();meSpeakPrime();
-    try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}
-  };
-  ['pointerdown','keydown','touchstart','click'].forEach(ev=>addEventListener(ev,primeAudio,{passive:true}));
-  // Chrome pauses long-idle speech queues — nudge it awake on scroll.
-  addEventListener('scroll',()=>{try{if(speechSynthesis.paused)speechSynthesis.resume();}catch(e){}},{passive:true});
-}
-if(vBtn){
-  // keep the toggle — meSpeak (robot voice) works even when the OS has no Web-Speech voice
-  paintVoiceBtn();
-  vBtn.addEventListener('click',()=>{
-    voiceOn=!voiceOn;paintVoiceBtn();
-    if(!voiceOn){stopSpeak();botMouthStop();}
-    // Turning on: re-say the bot's current bubble (NOT the silent intro).
-    else if(botVisible&&bubble.classList.contains('show')&&bubble.textContent.trim()){
-      speak(bubble.textContent.trim(),{bot:true});botMouthStart();
-    }
-  });
-}
-
 @php
   /* ---------- INTRO CONTENT (editable from Admin → Settings) ---------- */
   $expCount  = $experiences->count();
@@ -1405,14 +1436,21 @@ if(vBtn){
   $introScript[] = ['t' => $introWelcome, 'd' => 1200, 'launch' => true];
 @endphp
 const bootLines=@json($bootLines);
+const bootBar=document.getElementById('bootBar');
+const bootPct=document.getElementById('bootPct');
+const bootPanel=document.getElementById('bootPanel');
 function phaseBoot(){
   bootLines.forEach((l,idx)=>{
     const ln=document.createElement('span');ln.className='ln'+(idx===0||idx===5?' sys':'');
     ln.innerHTML=`<span>> ${l[0]}...</span><span>${l[1]}</span>`;
     bootEl.appendChild(ln);
-    gsap.to(ln,{opacity:1,duration:.05,delay:.35+idx*.42});
+    gsap.to(ln,{opacity:1,duration:.05,delay:.35+idx*.42,onComplete(){
+      const pct=Math.round(((idx+1)/bootLines.length)*100);
+      if(bootBar)bootBar.style.width=pct+'%';
+      if(bootPct)bootPct.textContent=pct+'%';
+    }});
   });
-  later(()=>{gsap.to(bootEl,{opacity:0,height:0,marginBottom:0,duration:.5});phaseAssemble();},350+bootLines.length*420+520);
+  later(()=>{gsap.to(bootPanel,{opacity:0,y:-10,duration:.5,onComplete(){bootPanel.style.display='none';}});phaseAssemble();},350+bootLines.length*420+520);
 }
 
 function phaseAssemble(){
@@ -1496,13 +1534,17 @@ function phaseDialogue(){
     if(step.wave)gsap.fromTo('#holoArm',{rotate:0},{rotate:-26,duration:.3,yoyo:true,repeat:3,ease:'sine.inOut'});
     let advanced=false;
     const adv=()=>{if(advanced||introDone)return;advanced=true;holoTalkStop();if(step.launch)phaseLaunch();else next();};
-    typeLine(step.t,!!step.html);
-    holoTalkStart();                        // robot visibly "talks" for every line
     if(voiceOn){
-      // advance only after the robot finishes speaking the line (so nothing is cut off)
-      speak(step.t,{intro:true,onend:()=>{holoTalkStop();later(adv,420);}});
+      // wait for the MP3 to actually start before typing/talking, so the line and
+      // the voice begin together instead of the text racing ahead of the audio
+      speak(step.t,{intro:true,
+        onstart:()=>{typeLine(step.t,!!step.html);holoTalkStart();},
+        onend:()=>{holoTalkStop();later(adv,420);}
+      });
       later(adv,(step.t.length*95)+6000);   // safety backstop if the voice stalls
     }else{
+      typeLine(step.t,!!step.html);
+      holoTalkStart();                        // robot visibly "talks" for every line
       later(()=>{holoTalkStop();adv();},step.d);   // voice disabled — just time the lines
     }
   }
@@ -1627,10 +1669,7 @@ function removeGate(){
   else enterGate.remove();
 }
 function startBoot(unlock){
-  if(unlock){
-    RobotSfx.unlock();meSpeakPrime();
-    if(canSpeak){try{const u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u);}catch(e){}}
-  }
+  if(unlock)unlockAudio();
   removeGate();
   phaseBoot();
 }
@@ -1817,12 +1856,15 @@ function botSay(idx,force){
 function botFreeSay(html){
   if(!botVisible||!html)return;
   const plain=html.replace(/<[^>]+>/g,'');
-  bubble.innerHTML=html;bubble.classList.add('show');
-  speak(plain,{bot:true});
-  botMouthStart();
   clearTimeout(bubbleTimer);
-  bubbleTimer=setTimeout(()=>{bubble.classList.remove('show');botMouthStop();},5200);
-  if(hasGSAP&&!reduced)gsap.fromTo('#armWave',{rotate:0},{rotate:-24,duration:.3,yoyo:true,repeat:3,ease:'sine.inOut',transformOrigin:'33px 80px'});
+  // show the bubble/mouth-talk right as the voice actually starts, not before —
+  // avoids the text sitting there for a second or two while the MP3 is still loading
+  speak(plain,{bot:true,onstart:()=>{
+    bubble.innerHTML=html;bubble.classList.add('show');
+    botMouthStart();
+    bubbleTimer=setTimeout(()=>{bubble.classList.remove('show');botMouthStop();},5200);
+    if(hasGSAP&&!reduced)gsap.fromTo('#armWave',{rotate:0},{rotate:-24,duration:.3,yoyo:true,repeat:3,ease:'sine.inOut',transformOrigin:'33px 80px'});
+  }});
   resetIdle();
 }
 function botCelebrate(){
@@ -1855,7 +1897,30 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
   const mic=document.getElementById('botChatMic');
   const closeBtn=document.getElementById('botChatClose');
   const toggleBtn=document.getElementById('botChatToggle');
+  const suggestBox=document.getElementById('botChatSuggestions');
+  const SUGGESTIONS=@json(array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $settings['assistant_suggestions']))))).slice(0,5);
   let chatHistory=[];
+  let focused=null;
+  let currentAbort=null;
+  function clearFocus(){if(focused){focused.classList.remove('ai-focus');focused=null;}}
+
+  function hideSuggestions(){suggestBox.classList.add('hide');}
+  function showSuggestions(){
+    if(!SUGGESTIONS.length)return;
+    suggestBox.innerHTML='';
+    SUGGESTIONS.forEach(q=>{
+      const b=document.createElement('button');
+      b.type='button';b.className='chip';b.textContent=q;
+      b.addEventListener('click',()=>{
+        if(input.disabled)return;
+        hideSuggestions();
+        input.value=q;
+        form.requestSubmit();
+      });
+      suggestBox.appendChild(b);
+    });
+    suggestBox.classList.remove('hide');
+  }
 
   function openPanel(){
     panel.classList.add('show');
@@ -1866,15 +1931,30 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
       const greeting=@json("I'm " . $settings['first_name'] . "'s assistant. How may I help you?");
       addMsg('assistant',greeting);
       speak(greeting,{bot:true});
+      showSuggestions();
     }
   }
   function closePanel(){
     panel.classList.remove('show');
     toggleBtn.classList.remove('hide');
     document.body.classList.remove('chat-open');
+    // closing mid-conversation should stop everything it was doing — the
+    // in-flight request, the voice reply, and any section it had highlighted
+    if(currentAbort){currentAbort.abort();currentAbort=null;}
+    stopSpeak();
+    clearFocus();
+    suppressBotSay=false;
   }
   closeBtn.addEventListener('click',closePanel);
   toggleBtn.addEventListener('click',openPanel);
+
+  /* Scrolling anywhere inside the widget (header, suggestion chips, form — not
+     just the message log) should scroll the chat, never the page behind it. */
+  panel.addEventListener('wheel',e=>{
+    const atTop=log.scrollTop<=0, atBottom=log.scrollTop+log.clientHeight>=log.scrollHeight-1;
+    if((e.deltaY<0&&!atTop)||(e.deltaY>0&&!atBottom))log.scrollTop+=e.deltaY;
+    e.preventDefault();
+  },{passive:false});
 
   /* voice input — reuses the same language setting as the bot's voice output */
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -1916,16 +1996,20 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
     e.preventDefault();
     const question=input.value.trim();
     if(!question)return;
+    hideSuggestions();
     addMsg('user',question);
     input.value='';
     input.disabled=true;
+    currentAbort=new AbortController();
     try{
       const res=await fetch(CHAT_URL,{
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json',
           'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
-        body:JSON.stringify({question,history:chatHistory.slice(-8)})
+        body:JSON.stringify({question,history:chatHistory.slice(-8)}),
+        signal:currentAbort.signal
       });
+      if(!panel.classList.contains('show'))return;   // closed while waiting — drop the response
       const data=await res.json();
       const answer=data.answer||"Signal interference — try the contact form below.";
       addMsg('assistant',answer);
@@ -1934,10 +2018,8 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
       const segments=(data.segments||[]).filter(s=>s&&s.text);
       if(segments.length){
         suppressBotSay=true;
-        let focused=null;
-        function clearFocus(){if(focused){focused.classList.remove('ai-focus');focused=null;}}
         function playSegment(i){
-          if(i>=segments.length){clearFocus();suppressBotSay=false;return;}
+          if(!panel.classList.contains('show')||i>=segments.length){clearFocus();suppressBotSay=false;return;}
           const seg=segments[i];
           clearFocus();
           if(seg.section){
@@ -1953,10 +2035,15 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
         speak(answer,{bot:true});
       }
     }catch(err){
+      if(err.name==='AbortError')return;   // closed intentionally — not a real failure
       addMsg('assistant',"Signal interference — try the contact form below.");
     }finally{
+      currentAbort=null;
       input.disabled=false;
-      input.focus();
+      if(panel.classList.contains('show')){
+        input.focus();
+        showSuggestions();   // bring the quick-reply chips back so another one can be tapped
+      }
     }
   });
 })();

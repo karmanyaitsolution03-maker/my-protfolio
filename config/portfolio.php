@@ -19,6 +19,7 @@
 return [
 
     'Identity' => [
+        'photo'          => ['Profile photo (large framed portrait on the hero section)', '', 'image'],
         'first_name'     => ['First name', 'Rishabh', 'text'],
         'last_name'      => ['Last name', 'Parekh', 'text'],
         'designation'    => ['Designation', 'Backend Software Engineer', 'text'],
@@ -66,10 +67,8 @@ return [
             . "PROFESSIONAL RELIABILITY SCORE | EXCEPTIONAL ★", 'area'],
         'intro_validated'  => ['Validation line', 'Profile overview ready.', 'text'],
         'intro_welcome'    => ['Welcome / launch line', 'Please welcome :name.', 'text'],
-        'intro_voice'       => ['Chat-bot voice — the floating robot speaks aloud (1 = on, 0 = off)', '1', 'text'],
-        'intro_voice_lang'  => ['Bot voice language code (e.g. en-US, en-GB, en-IN, hi-IN)', 'en-US', 'text'],
-        'intro_voice_gender'=> ['Preferred bot voice (female / male / any)', 'male', 'text'],
-        'intro_voice_name'  => ['Exact voice name (optional — overrides gender; e.g. "Google UK English Female", "Microsoft Zira")', '', 'text'],
+        'intro_voice'       => ['Chat-bot voice — the floating robot speaks aloud via OpenAI TTS (1 = on, 0 = off)', '1', 'text'],
+        'intro_voice_lang'  => ['Voice INPUT language code for the mic button (e.g. en-US, en-GB, en-IN, hi-IN) — spoken output is always the "nova" OpenAI voice', 'en-US', 'text'],
     ],
 
     'Hero / Command Deck' => [
@@ -187,6 +186,12 @@ return [
             . "Tip: hover the project cards — the <b>data flows</b> respond to attention. Like me.", 'area'],
         'assistant_focus'  => ['On contact focus (HTML)', 'Incoming transmission detected! Boosting signal… 📡', 'text'],
         'assistant_resume' => ['On resume click (HTML)', 'Subject file transferred. Classification: <b>highly recommendable</b>. 📄✨', 'text'],
+        'assistant_suggestions' => ['Quick-reply suggestions shown when the chat opens — one per line (max 5 used)',
+            "What are his core skills?\n"
+            . "Tell me about his work experience\n"
+            . "Show me his projects\n"
+            . "Is he available for freelance work?\n"
+            . "How can I contact him?", 'area'],
     ],
 
 ];

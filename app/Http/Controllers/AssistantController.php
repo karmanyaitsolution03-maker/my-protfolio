@@ -53,7 +53,11 @@ class AssistantController extends Controller
         $path = "tts/{$hash}.mp3";
         $disk = Storage::disk('public');
 
-        if (! $disk->exists($path)) {
+        // exists() alone isn't enough to trust the cache: an earlier failed write can
+        // leave a 0-byte (or otherwise empty) file behind, and since the filename is
+        // deterministic from the text, that broken file would be served forever without
+        // this check ever regenerating it.
+        if (! $disk->exists($path) || $disk->size($path) === 0) {
             try {
                 $response = Http::withToken($apiKey)
                     ->timeout(30)

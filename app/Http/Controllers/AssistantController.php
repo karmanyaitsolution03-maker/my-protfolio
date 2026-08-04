@@ -89,7 +89,19 @@ class AssistantController extends Controller
             }
         }
 
-        return response()->json(['url' => $disk->url($path)]);
+        // Serve the audio bytes inline as a data: URI instead of a separate URL to
+        // storage/app/public. The disk write still happens above purely as a cache
+        // (so the same line is never re-generated via OpenAI), but the browser never
+        // makes a second request to fetch it — it gets the bytes directly in this
+        // response, which sidesteps any webserver/CDN/firewall rule that blocks or
+        // interferes with direct requests to the storage path.
+        $bytes = $disk->get($path);
+        if ($bytes === null) {
+            Log::error("TTS cache read failed after write: {$path}");
+            return response()->json(['url' => null]);
+        }
+
+        return response()->json(['url' => 'data:audio/mpeg;base64,' . base64_encode($bytes)]);
     }
 
     public function chat(Request $request): JsonResponse

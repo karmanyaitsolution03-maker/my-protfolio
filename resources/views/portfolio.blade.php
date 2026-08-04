@@ -1247,20 +1247,28 @@ const ttsAudio=new Audio();
 ttsAudio.preload='auto';
 const ttsCache=new Map();   // text -> resolved MP3 url, avoids re-fetching a line already spoken this visit
 let speakGen=0;
+let ttsAbort=null;
 async function fetchTtsUrl(text){
   if(ttsCache.has(text))return ttsCache.get(text);
+  if(ttsAbort)ttsAbort.abort();   // a newer line superseded this one — stop wasting the request
+  const ac=new AbortController();ttsAbort=ac;
   try{
     const res=await fetch(TTS_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json',
         'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
-      body:JSON.stringify({text})
+      body:JSON.stringify({text}),
+      signal:ac.signal
     });
     const data=await res.json();
     const url=data.url||null;
+    if(!url)console.warn('[voice] TTS fetch returned no url',{status:res.status,data,text});
     if(url)ttsCache.set(text,url);
     return url;
-  }catch(e){return null;}
+  }catch(e){
+    if(e.name!=='AbortError')console.warn('[voice] TTS fetch failed',e,{text});
+    return null;
+  }
 }
 async function speak(text,opts){
   opts=opts||{};
@@ -1284,11 +1292,11 @@ async function speak(text,opts){
   if(!url){finish();return;}
   ttsAudio.src=url;
   ttsAudio.onended=finish;
-  ttsAudio.onerror=finish;
+  ttsAudio.onerror=()=>{console.warn('[voice] audio element error',ttsAudio.error,{url,text});finish();};
   try{
     await ttsAudio.play();
     if(myGen===speakGen)doStart();
-  }catch(e){finish();}
+  }catch(e){console.warn('[voice] play() rejected',e.name,e.message,{url,text});finish();}
 }
 function stopSpeak(){
   speakGen++;
@@ -1489,7 +1497,14 @@ function phaseAssemble(){
 }
 
 const SCRIPT=@json($introScript);
+// Bumped every call so a line's typing loop can tell it's been superseded. Without
+// this, a line whose voice/backstop ends before its own character-by-character
+// typing finishes (common on longer lines) leaves its setTimeout loop alive; it then
+// keeps overwriting sayNow at the same time as the next line's loop, which looks like
+// the text glitching/fast-forwarding and lines "skipping" with no voice.
+let typeGen=0;
 function typeLine(html,isHTML,cb){
+  const myTypeGen=++typeGen;
   if(sayNow.textContent.trim()){
     const prev=document.createElement('div');prev.textContent='» '+sayNow.textContent;sayPrev.prepend(prev);
     while(sayPrev.children.length>2)sayPrev.lastChild.remove();
@@ -1499,7 +1514,7 @@ function typeLine(html,isHTML,cb){
   let i=0;
   const caret=document.createElement('span');caret.className='tcaret';
   function tick(){
-    if(introDone)return;
+    if(introDone||myTypeGen!==typeGen)return;
     sayNow.textContent=plain.slice(0,++i);
     sayNow.appendChild(caret);
     if(i<plain.length)setTimeout(tick,22+Math.random()*20);
@@ -1537,15 +1552,23 @@ function phaseDialogue(){
     if(voiceOn){
       // wait for the MP3 to actually start before typing/talking, so the line and
       // the voice begin together instead of the text racing ahead of the audio
+      let typed=false;
+      const doType=()=>{if(typed)return;typed=true;typeLine(step.t,!!step.html);holoTalkStart();};
       speak(step.t,{intro:true,
-        onstart:()=>{typeLine(step.t,!!step.html);holoTalkStart();},
+        onstart:doType,
         onend:()=>{holoTalkStop();later(adv,420);}
       });
-      later(adv,(step.t.length*95)+6000);   // safety backstop if the voice stalls
+      // Safety backstop if the voice stalls (slow/failed TTS fetch). If this fires
+      // before the fetch resolves, speak() gets superseded once the next line's
+      // speak() call runs and its onstart never fires — so without this, the line's
+      // text (and voice) would silently vanish instead of just losing its audio.
+      later(()=>{doType();later(adv,420);},(step.t.length*95)+6000);
     }else{
-      typeLine(step.t,!!step.html);
+      // voice disabled — step.d is a post-typing dwell time, not a hard total
+      // deadline; advancing on a fixed timer regardless of typing progress cut
+      // longer lines off mid-type and rushed straight through the rest of the intro.
       holoTalkStart();                        // robot visibly "talks" for every line
-      later(()=>{holoTalkStop();adv();},step.d);   // voice disabled — just time the lines
+      typeLine(step.t,!!step.html,()=>{holoTalkStop();later(adv,step.d);});
     }
   }
   next();
@@ -1714,13 +1737,21 @@ function onScrollUpdate(){
   hudFill.style.width=(p*100)+'%';hudPct.textContent=Math.round(p*100)+'%';
 }
 addEventListener('scroll',onScrollUpdate,{passive:true});onScrollUpdate();
+// Fast/inertial scrolling can cross several sections' thresholds within one
+// second; without settling, each crossing fired its own TTS request and
+// immediately cancelled the previous one, so whichever fetch happened to
+// finish last "won" — making voice playback feel random. Debouncing the
+// voice trigger (HUD/waypoint highlight still update instantly) means we
+// only speak once the scroll position has actually settled on a section.
+let botSayTimer=null;
 const io=new IntersectionObserver(entries=>{
   entries.forEach(en=>{
     if(!en.isIntersecting)return;
     const idx=sectors.indexOf(en.target);if(idx<0)return;
     wps.forEach((w,i)=>w.classList.toggle('active',i===idx));
     hudSector.textContent=sectorNames[idx];
-    botSay(idx);
+    clearTimeout(botSayTimer);
+    botSayTimer=setTimeout(()=>botSay(idx),200);
   });
 },{threshold:.32});
 sectors.forEach(s=>io.observe(s));

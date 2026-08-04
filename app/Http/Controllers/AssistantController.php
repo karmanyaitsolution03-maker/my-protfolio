@@ -70,7 +70,15 @@ class AssistantController extends Controller
                     return response()->json(['url' => null]);
                 }
 
+                // put() returning true only means Flysystem didn't throw — it does not
+                // guarantee the bytes actually landed on disk (silent failure on a full
+                // disk, a quota limit, or a permissions/IO hiccup), so re-check the file
+                // itself before ever handing back a URL for it.
                 $disk->put($path, $response->body());
+                if (! $disk->exists($path) || $disk->size($path) === 0) {
+                    Log::error("TTS write failed or produced an empty file: {$path}");
+                    return response()->json(['url' => null]);
+                }
             } catch (\Throwable $e) {
                 Log::error('TTS error: ' . $e->getMessage());
                 return response()->json(['url' => null]);

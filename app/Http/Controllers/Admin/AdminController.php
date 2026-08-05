@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\AdminReply;
 use App\Models\Achievement;
 use App\Models\Availability;
 use App\Models\CareerPoint;
@@ -18,6 +19,8 @@ use App\Models\Visit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -160,14 +163,88 @@ class AdminController extends Controller
         foreach ($this->resources as $key => $cfg) {
             $counts[$key] = ['title' => $cfg['title'], 'count' => $cfg['model']::count()];
         }
+        // Reverse-IP company lookup is a live, cached-per-IP HTTP call (see Visit::getCompanyAttribute),
+        // so only run it over a small, recent slice of visits — keeps the dashboard fast even on a
+        // cold cache — and surface just the ones that actually resolved to a real company.
+        $notableVisitors = Visit::whereNotNull('ip_address')
+            ->latest('updated_at')
+            ->limit(15)
+            ->get()
+            ->filter(fn ($v) => $v->company !== null)
+            ->take(6)
+            ->values();
+
+        $hotLeadQuery = Visit::hotLeadsQuery();
+        $hotLeadsTotal = (clone $hotLeadQuery)->count();
+        $hotLeads = $hotLeadQuery->latest('updated_at')->limit(10)->get();
+
+        $visits        = Visit::sum('visit_count');
+        $projectViews  = Interaction::where('type', 'view_projects')->count();
+        $contactClicks = Interaction::where('type', 'contact_click')->count();
+        $messages      = Message::count();
+
+        $funnel = $this->buildFunnel([
+            ['label' => 'Visits',          'value' => $visits],
+            ['label' => 'Project views',   'value' => $projectViews],
+            ['label' => 'Contact clicks',  'value' => $contactClicks],
+            ['label' => 'Submissions',     'value' => $messages],
+        ]);
+
         return view('admin.dashboard', [
             'counts'        => $counts,
-            'messages'      => Message::count(),
-            'visits'        => Visit::sum('visit_count'),
-            'contactClicks'  => Interaction::where('type', 'contact_click')->count(),
+            'messages'      => $messages,
+            'visits'        => $visits,
+            'contactClicks'  => $contactClicks,
             'resumeClicks'   => Interaction::where('type', 'resume_click')->count(),
             'whatsappClicks' => Interaction::where('type', 'whatsapp_click')->count(),
+            'nudgeShown'      => Interaction::where('type', 'nudge_shown')->count(),
+            'nudgeResume'     => Interaction::where('type', 'nudge_resume_click')->count(),
+            'nudgeCall'       => Interaction::where('type', 'nudge_call_click')->count(),
+            'nudgeDismissed'  => Interaction::where('type', 'nudge_dismissed')->count(),
+            'notableVisitors' => $notableVisitors,
+            'hotLeads'        => $hotLeads,
+            'hotLeadsTotal'   => $hotLeadsTotal,
+            'funnel'          => $funnel,
         ]);
+    }
+
+    /**
+     * Turns an ordered list of ['label' => ..., 'value' => ...] stages into a funnel:
+     * each stage's share of the top stage (for bar width), its retention from the
+     * previous stage, and which single stage bleeds the most visitors — the one
+     * thing worth fixing first.
+     */
+    protected function buildFunnel(array $stages): array
+    {
+        $top = $stages[0]['value'] ?? 0;
+        $prevValue = null;
+        $worstIndex = null;
+        $worstDropPct = -1;
+
+        foreach ($stages as $i => &$stage) {
+            $stage['pct_of_top'] = $top > 0 ? round($stage['value'] / $top * 100) : 0;
+
+            if ($i === 0) {
+                $stage['pct_of_prev'] = null;
+                $stage['drop_off_pct'] = null;
+            } else {
+                $stage['pct_of_prev'] = $prevValue > 0 ? round($stage['value'] / $prevValue * 100) : 0;
+                $stage['drop_off_pct'] = 100 - $stage['pct_of_prev'];
+                if ($stage['drop_off_pct'] > $worstDropPct) {
+                    $worstDropPct = $stage['drop_off_pct'];
+                    $worstIndex = $i;
+                }
+            }
+
+            $prevValue = $stage['value'];
+        }
+        unset($stage);
+
+        return [
+            'stages'        => $stages,
+            'worst_index'   => $worstIndex,
+            'worst_drop_pct' => $worstDropPct,
+        ];
     }
 
     public function migrate()
@@ -264,6 +341,27 @@ class AdminController extends Controller
         $this->gate();
         $message->delete();
         return back()->with('ok', 'Message deleted.');
+    }
+
+    /** Send the (possibly hand-edited) AI-drafted reply — one click from the Messages page. */
+    public function messageReply(Request $request, Message $message)
+    {
+        $this->gate();
+        $data = $request->validate(['reply' => 'required|string|max:5000']);
+
+        $settings = Setting::resolved();
+        $settings['name'] = trim(($settings['first_name'] ?? '') . ' ' . ($settings['last_name'] ?? ''));
+
+        try {
+            Mail::to($message->email)->send(new AdminReply($message, $data['reply'], $settings));
+        } catch (\Throwable $e) {
+            Log::error('Failed to send admin reply email: ' . $e->getMessage());
+            return back()->withErrors(['reply' => 'Failed to send — please try again.']);
+        }
+
+        $message->update(['ai_reply_draft' => $data['reply'], 'replied_at' => now()]);
+
+        return back()->with('ok', 'Reply sent to ' . $message->email . '.');
     }
 
     public function visitors()

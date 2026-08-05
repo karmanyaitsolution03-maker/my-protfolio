@@ -9,30 +9,51 @@ class MessageTriageService
 {
     protected const CATEGORIES = ['recruiter', 'client', 'spam', 'other'];
 
-    /** Classify + summarize a contact message. Returns null on any failure. */
-    public function triage(string $name, string $email, string $message): ?array
+    /**
+     * Classify a contact message, summarize it, and draft a ready-to-send reply in
+     * the owner's voice (grounded in their real portfolio settings, not invented).
+     * $settings is the resolved Setting::resolved() array — used only for context,
+     * safe to omit. Returns null on any failure.
+     */
+    public function triage(string $name, string $email, string $message, array $settings = []): ?array
     {
         $apiKey = config('services.openai.key');
         if (! $apiKey) {
             return null;
         }
 
+        $ownerFirst      = $settings['first_name'] ?? 'the portfolio owner';
+        $designation     = $settings['designation'] ?? '';
+        $statusLabel     = $settings['status_label'] ?? '';
+        $responseTime    = $settings['response_time'] ?? '';
+        $location        = $settings['location'] ?? '';
+        $timezone        = $settings['timezone'] ?? '';
+        $categories      = implode('|', self::CATEGORIES);
+
+        $systemPrompt = <<<PROMPT
+        Triage an incoming portfolio contact message on behalf of {$ownerFirst}.
+
+        Respond with JSON only: {"category": one of {$categories}, "summary": a plain one-sentence summary under 20 words, "reply": a ready-to-send reply}.
+
+        For "reply": write it in first person as {$ownerFirst}, addressed to the sender by name. Thank them, respond to what they specifically asked, and naturally mention availability or response time only if it's relevant to their question. Under 120 words, no subject line, no signature (one is added automatically when it's sent). Never invent experience, rates, or availability beyond what's given below. If category is "spam", leave "reply" as an empty string.
+
+        Context about {$ownerFirst}:
+        Designation: {$designation}
+        Availability status: {$statusLabel}
+        Typical response time: {$responseTime}
+        Location / timezone: {$location} ({$timezone})
+        PROMPT;
+
         try {
             $response = Http::withToken($apiKey)
-                ->timeout(10)
+                ->timeout(12)
                 ->post('https://api.openai.com/v1/chat/completions', [
-                    'model' => 'gpt-4o-mini',
+                    'model'      => 'gpt-4o-mini',
+                    'max_tokens' => 400,
                     'response_format' => ['type' => 'json_object'],
                     'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => 'Classify the incoming portfolio contact message. Respond with JSON only: '
-                                . '{"category": one of ' . implode('|', self::CATEGORIES) . ', "summary": a plain one-sentence summary under 20 words}.',
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => "Name: {$name}\nEmail: {$email}\nMessage: {$message}",
-                        ],
+                        ['role' => 'system', 'content' => $systemPrompt],
+                        ['role' => 'user', 'content' => "Name: {$name}\nEmail: {$email}\nMessage: {$message}"],
                     ],
                 ]);
 
@@ -51,6 +72,7 @@ class MessageTriageService
             return [
                 'category' => $parsed['category'],
                 'summary'  => (string) ($parsed['summary'] ?? ''),
+                'reply'    => trim((string) ($parsed['reply'] ?? '')),
             ];
         } catch (\Throwable $e) {
             Log::error('OpenAI triage error: ' . $e->getMessage());

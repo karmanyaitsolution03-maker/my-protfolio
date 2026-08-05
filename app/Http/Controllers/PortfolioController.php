@@ -9,12 +9,13 @@ use App\Models\Experience;
 use App\Models\Project;
 use App\Models\Setting;
 use App\Models\SkillCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class PortfolioController extends Controller
 {
-    public function home()
+    public function home(Request $request)
     {
         $skillCategories = SkillCategory::with('skills')->orderBy('position')->get();
         $experiences     = Experience::orderBy('position')->get();
@@ -45,16 +46,81 @@ class PortfolioController extends Controller
         ]));
 
         return view('portfolio', [
-            'settings'        => $settings,
-            'profileRows'     => $profileRows,
-            'availability'    => $availability,
-            'careerPoints'    => $careerPoints,
-            'about'           => $about,
-            'skillCategories' => $skillCategories,
-            'experiences'     => $experiences,
-            'projects'        => $projects,
-            'achievements'    => $achievements,
+            'settings'          => $settings,
+            'profileRows'       => $profileRows,
+            'availability'      => $availability,
+            'careerPoints'      => $careerPoints,
+            'about'             => $about,
+            'skillCategories'   => $skillCategories,
+            'experiences'       => $experiences,
+            'projects'          => $projects,
+            'achievements'      => $achievements,
+            'referrerGreeting'  => $this->referrerGreeting($request),
+            'suggestedMode'     => $this->suggestedMode($request),
         ]);
+    }
+
+    /** Lowercased referrer host with any "www." stripped, or '' when there isn't one. */
+    protected function refererHost(Request $request): string
+    {
+        $referrer = $request->headers->get('referer');
+        if (! $referrer) {
+            return '';
+        }
+
+        $host = strtolower((string) parse_url($referrer, PHP_URL_HOST));
+        return preg_replace('/^www\./', '', $host);
+    }
+
+    /**
+     * A one-line "thanks for coming from X" greeting spliced into the intro narration
+     * when the visitor arrived via a link on a known platform. Null for direct visits,
+     * search engines, or anywhere unrecognized — not every visit needs a special line.
+     */
+    protected function referrerGreeting(Request $request): ?string
+    {
+        $host = $this->refererHost($request);
+        if ($host === '') {
+            return null;
+        }
+
+        return match (true) {
+            str_contains($host, 'linkedin.com')  => 'Thanks for connecting on LinkedIn!',
+            str_contains($host, 'github.com')    => 'Thanks for stopping by from GitHub!',
+            in_array($host, ['twitter.com', 'x.com'], true) => 'Thanks for the visit from X!',
+            str_contains($host, 'instagram.com') => 'Thanks for stopping by from Instagram!',
+            str_contains($host, 'facebook.com')  => 'Thanks for stopping by from Facebook!',
+            str_contains($host, 'reddit.com')    => 'Thanks for the visit from Reddit!',
+            str_contains($host, 'wa.me'), str_contains($host, 'whatsapp.com') => 'Welcome in from WhatsApp!',
+            default => null,
+        };
+    }
+
+    /**
+     * Best-guess visitor intent from the referrer, used only to pre-select the
+     * recruiter/client toggle — the visitor can always override it with one tap,
+     * so a wrong guess costs nothing.
+     */
+    protected function suggestedMode(Request $request): ?string
+    {
+        $host = $this->refererHost($request);
+        if ($host === '') {
+            return null;
+        }
+
+        return match (true) {
+            str_contains($host, 'linkedin.com'),
+            str_contains($host, 'naukri.com'),
+            str_contains($host, 'indeed.com'),
+            str_contains($host, 'glassdoor.com') => 'recruiter',
+
+            str_contains($host, 'github.com'),
+            str_contains($host, 'dev.to'),
+            str_contains($host, 'news.ycombinator.com'),
+            str_contains($host, 'producthunt.com') => 'client',
+
+            default => null,
+        };
     }
 
     /** Replace :name/:first/:last/:exp/:proj/:ach tokens across all setting values. */

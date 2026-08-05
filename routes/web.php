@@ -14,6 +14,7 @@ Route::post('/contact', [ContactController::class, 'store'])->middleware('thrott
 Route::post('/interactions', [InteractionController::class, 'track'])->middleware('throttle:20,1')->name('interactions.track');
 Route::post('/assistant/chat', [AssistantController::class, 'chat'])->middleware('throttle:10,1')->name('assistant.chat');
 Route::post('/assistant/speak', [AssistantController::class, 'speak'])->middleware('throttle:40,1')->name('assistant.speak');
+Route::post('/assistant/match', [AssistantController::class, 'match'])->middleware('throttle:6,1')->name('assistant.match');
 
 /* ---------- sitemap ---------- */
 Route::get('/sitemap.xml', function (\Illuminate\Http\Request $request) {
@@ -51,6 +52,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/migrate', [AdminController::class, 'migrate'])->name('migrate');
     Route::get('/messages', [AdminController::class, 'messages'])->name('messages');
     Route::get('/messages/export', [AdminController::class, 'messagesExport'])->name('messages.export');
+    Route::post('/messages/{message}/reply', [AdminController::class, 'messageReply'])->name('messages.reply');
     Route::delete('/messages/{message}', [AdminController::class, 'messageDelete'])->name('messages.delete');
     Route::get('/visitors', [AdminController::class, 'visitors'])->name('visitors');
 

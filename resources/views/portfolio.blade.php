@@ -345,6 +345,23 @@ main{position:relative;z-index:2}
 .btn-go{background:var(--grad);color:#03040A;box-shadow:0 10px 36px rgba(77,160,254,.4)}
 .btn-go:hover{box-shadow:0 14px 50px rgba(61,232,255,.55)}
 .btn-line{border:1px solid var(--line-hot);background:rgba(61,232,255,.05);color:var(--cyan)}
+.mode-prompt{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
+  margin-top:24px;padding:9px 10px 9px 18px;border:1px solid var(--line-hot);border-radius:999px;
+  background:rgba(6,10,22,.55);backdrop-filter:blur(10px);transition:opacity .35s,transform .35s}
+.mode-prompt.hide{opacity:0;pointer-events:none;transform:translateY(-6px)}
+.mode-prompt .mode-q{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--muted)}
+.mode-btn{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.03em;
+  padding:8px 16px;border-radius:999px;border:1px solid var(--line-hot);background:rgba(61,232,255,.06);
+  color:var(--cyan);cursor:pointer;transition:.2s}
+.mode-btn:hover{background:rgba(61,232,255,.16);transform:translateY(-1px)}
+.mode-dismiss{background:none;border:none;color:var(--faint);font-size:14px;cursor:pointer;padding:4px 8px;line-height:1;transition:.2s}
+.mode-dismiss:hover{color:var(--text)}
+.mode-note{margin-top:16px;font-size:13.5px;color:var(--cyan);max-width:520px;display:none}
+.mode-note.show{display:block}
+.mode-switch{margin-top:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--faint);
+  background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px;display:none}
+.mode-switch.show{display:inline-block}
+@media(max-width:560px){.mode-prompt{padding:12px 14px;border-radius:18px}.mode-prompt .mode-q{width:100%;text-align:center;margin-bottom:2px}}
 .holo-chip{position:absolute;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--muted);
   padding:9px 15px;border-radius:12px;border:1px solid var(--line-hot);background:rgba(6,10,22,.7);backdrop-filter:blur(10px);
   box-shadow:0 12px 32px rgba(0,0,0,.4),0 0 22px rgba(61,232,255,.1);white-space:nowrap;will-change:transform}
@@ -497,6 +514,11 @@ main{position:relative;z-index:2}
 .launch{position:relative;overflow:hidden;justify-content:center;width:100%;background:var(--grad);color:#03040A;box-shadow:0 10px 36px rgba(61,180,255,.4)}
 .launch .ok2{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(105deg,#2BC780,#54F0A8);transform:translateY(101%);transition:transform .5s var(--ease);color:#03150C}
 .launch.sent .ok2{transform:translateY(0)}
+.launch .spin{position:absolute;inset:0;display:grid;place-items:center;background:var(--grad);opacity:0;pointer-events:none;transition:opacity .2s}
+.launch .spin::after{content:'';width:18px;height:18px;border-radius:50%;border:2.5px solid rgba(3,4,10,.3);border-top-color:#03040A;animation:gearSpin .7s linear infinite}
+.launch.loading{pointer-events:none}
+.launch.loading .spin{opacity:1}
+.launch.loading>span:first-child{opacity:0}
 @media(max-width:880px){.command{grid-template-columns:1fr}.cmd-left{border-right:none;border-bottom:1px solid var(--line)}}
 
 #complete{position:fixed;inset:0;z-index:4500;display:grid;place-items:center;background:rgba(2,3,8,.88);backdrop-filter:blur(14px);opacity:0;pointer-events:none;transition:opacity .5s}
@@ -542,14 +564,42 @@ main{position:relative;z-index:2}
   opacity:0;transform:translateY(10px) scale(.96);transform-origin:bottom right;pointer-events:none;
   transition:opacity .3s,transform .3s var(--ease)}
 #botChat.show{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
-#botChatHead{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line);
+#botChatHead{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);
   font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--cyan);text-transform:uppercase;flex:none}
-#botChatClose{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;line-height:1;padding:4px 6px;border-radius:6px;transition:.2s}
+#botChatHead>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#jdMatchToggle{background:none;border:1px solid var(--line);border-radius:999px;color:var(--muted);
+  font-size:9.5px;letter-spacing:.03em;padding:5px 10px;cursor:pointer;transition:.2s;text-transform:none;font-family:var(--mono);flex:none}
+#jdMatchToggle:hover{border-color:var(--line-hot);color:var(--cyan)}
+#botChatClose{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;line-height:1;padding:4px 6px;border-radius:6px;transition:.2s;flex:none}
 #botChatClose:hover{color:var(--text);background:rgba(255,255,255,.06)}
 #botChatLog{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:14px 14px 6px;display:flex;flex-direction:column;gap:9px}
 #botChatLog .msg{font-size:12.5px;line-height:1.5;padding:8px 11px;border-radius:10px;max-width:88%}
 #botChatLog .msg.user{align-self:flex-end;background:rgba(61,232,255,.14);color:var(--text)}
 #botChatLog .msg.assistant{align-self:flex-start;background:rgba(255,255,255,.05);color:var(--muted)}
+#jdMatchPanel{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+#jdMatchPanel[hidden]{display:none}
+#jdMatchPanel p{margin:0;font-size:12px;line-height:1.5;color:var(--muted)}
+#jdMatchInput{width:100%;min-height:140px;resize:vertical;background:rgba(255,255,255,.03);border:1px solid var(--line);
+  border-radius:9px;padding:10px 11px;color:var(--text);font-size:12px;line-height:1.5;font-family:inherit}
+#jdMatchInput:focus{outline:none;border-color:var(--line-hot)}
+.jd-match-actions{display:flex;gap:8px;justify-content:flex-end}
+.jd-match-actions button{font-family:var(--mono);font-size:11px;font-weight:700;padding:8px 14px;border-radius:9px;cursor:pointer;letter-spacing:.03em;border:none}
+#jdMatchCancel{background:none;border:1px solid var(--line)!important;color:var(--muted)}
+#jdMatchCancel:hover{color:var(--text);border-color:var(--line-hot)!important}
+#jdMatchSubmit{background:var(--grad);color:#03040A}
+#jdMatchSubmit:disabled{opacity:.55;cursor:default}
+.fit-card{align-self:stretch;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:12.5px;line-height:1.5;color:var(--muted)}
+.fit-score-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.fit-score{font-family:var(--mono);font-weight:800;font-size:16px;border-radius:999px;width:48px;height:48px;display:grid;place-items:center;flex:none}
+.fit-score.high{background:rgba(84,240,168,.16);color:#54F0A8}
+.fit-score.mid{background:rgba(255,197,110,.16);color:#FFC56E}
+.fit-score.low{background:rgba(255,107,157,.16);color:#FF6B9D}
+.fit-verdict{color:var(--text);font-size:12.5px;font-weight:600}
+.fit-group{margin-top:9px}
+.fit-group b{display:block;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:5px;font-weight:700}
+.fit-chip{display:inline-block;margin:0 5px 5px 0;padding:4px 9px;border-radius:999px;font-size:11px}
+.fit-chip.match{background:rgba(84,240,168,.12);color:#54F0A8;border:1px solid rgba(84,240,168,.3)}
+.fit-chip.gap{background:rgba(255,107,157,.1);color:#FF6B9D;border:1px solid rgba(255,107,157,.28)}
 .chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 10px;flex:none}
 .chat-suggestions.hide{display:none}
 .chat-suggestions .chip{background:rgba(61,232,255,.07);border:1px solid var(--line);border-radius:999px;padding:6px 12px;
@@ -815,9 +865,17 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   <div class="hero-role" data-reveal>{{ strtoupper($settings['designation']) }}</div>
   <p class="hero-quote" data-reveal>{!! $settings['tagline'] !!}</p>
   <div class="hero-ctas" data-reveal>
-    <a class="btn btn-go" href="#profile" data-magnetic>{{ $settings['hero_cta_primary'] }}</a>
+    <a class="btn btn-go" href="#profile" data-magnetic id="heroPrimaryCta" data-default-href="#profile" data-default-label="{{ $settings['hero_cta_primary'] }}">{{ $settings['hero_cta_primary'] }}</a>
     <a class="btn btn-line" href="#contact" data-magnetic data-track="contact_click">{{ $settings['hero_cta_secondary'] }}</a>
   </div>
+  <div class="mode-prompt" id="modePrompt">
+    <span class="mode-q">{{ $settings['mode_question'] }}</span>
+    <button type="button" class="mode-btn" data-mode="recruiter">{{ $settings['mode_recruiter_label'] }}</button>
+    <button type="button" class="mode-btn" data-mode="client">{{ $settings['mode_client_label'] }}</button>
+    <button type="button" class="mode-dismiss" id="modeDismiss" aria-label="Dismiss">✕</button>
+  </div>
+  <p class="mode-note" id="modeNote"></p>
+  <button type="button" class="mode-switch" id="modeSwitch">SWITCH MODE</button>
   @foreach(array_slice(array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $settings['hero_chips'])))), 0, 4) as $ci => $chip)
   <div class="holo-chip hc-{{ $ci + 1 }}" data-float>{!! $chip !!}</div>
   @endforeach
@@ -997,7 +1055,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
             {{ $settings['resume_label'] }}
           </a>
           @if(!empty($settings['whatsapp_number']))
-          <a class="cmd-link" href="https://wa.me/{{ preg_replace('/\D/', '', $settings['whatsapp_number']) }}?text={{ urlencode('Hi ' . $settings['first_name'] . ', I found your portfolio and would like to connect.') }}" target="_blank" rel="noopener" data-track="whatsapp_click">
+          <a class="cmd-link" href="https://wa.me/{{ preg_replace('/\D/', '', $settings['whatsapp_number']) }}?text={{ urlencode('Hi ' . $settings['first_name'] . ', I found your portfolio and would like to connect.') }}" target="_blank" rel="noopener" id="whatsappBtn" data-track="whatsapp_click" data-tel="+{{ preg_replace('/\D/', '', $settings['whatsapp_number']) }}">
             <span class="ic"><svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.2-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.3-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.4.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.3 0-.5s-.6-1.5-.8-2c-.2-.5-.4-.4-.6-.5h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.3-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.3a8.2 8.2 0 0 1-4.2-1.1l-.3-.2-3.1.8.8-3-.2-.3A8.3 8.3 0 1 1 12 20.3z"/></svg></span>
             {{ $settings['whatsapp_label'] }}
           </a>
@@ -1012,6 +1070,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
         <button class="btn launch" type="submit" data-magnetic>
           <span>{{ $settings['contact_btn'] }}</span>
           <span class="ok2">{{ $settings['contact_btn_sent'] }}</span>
+          <span class="spin" aria-hidden="true"></span>
         </button>
       </form>
     </div>
@@ -1053,7 +1112,7 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
   <div class="complete-box">
     <div class="t">{{ $settings['complete_tag'] }}</div>
     <h2>{{ $settings['complete_title'] }}</h2>
-    <p>{{ $settings['complete_text'] }}</p>
+    <p id="completeText">{{ $settings['complete_text'] }}</p>
     <button class="btn btn-line" id="completeClose" data-magnetic>{{ $settings['complete_btn'] }}</button>
   </div>
 </div>
@@ -1088,9 +1147,18 @@ footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:30px
 <div id="botChat" aria-label="AI assistant chat">
   <div id="botChatHead">
     <span>{{ $settings['first_name'] }}'s Assistant</span>
+    <button type="button" id="jdMatchToggle" aria-label="Match a job description">📋 JD Match</button>
     <button type="button" id="botChatClose" aria-label="Close chat">✕</button>
   </div>
   <div id="botChatLog"></div>
+  <div id="jdMatchPanel" hidden>
+    <p>Paste a job description and I'll show how {{ $settings['first_name'] }} stacks up against it — real skills and experience only, nothing invented.</p>
+    <textarea id="jdMatchInput" maxlength="4000" placeholder="Paste the job description here…"></textarea>
+    <div class="jd-match-actions">
+      <button type="button" id="jdMatchCancel">Cancel</button>
+      <button type="button" id="jdMatchSubmit">Check my fit</button>
+    </div>
+  </div>
   <div id="botChatSuggestions" class="chat-suggestions" aria-label="Suggested questions"></div>
   <form id="botChatForm" autocomplete="off">
     <button type="button" id="botChatMic" aria-label="Ask by voice">🎤</button>
@@ -1124,6 +1192,106 @@ const CHAT_URL=@json(route('assistant.chat'));
 const TTS_URL=@json(route('assistant.speak'));
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(hover:hover) and (pointer:fine)').matches;
+let contactSent=false;   // flips true once the contact form is actually submitted — gates the lead-capture nudge
+function trackEvent(type){
+  fetch(INTERACTIONS_URL,{
+    method:'POST',keepalive:true,
+    headers:{'Content-Type':'application/json','Accept':'application/json',
+      'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
+    body:JSON.stringify({type})
+  }).catch(()=>{});
+}
+
+/* =================== RECRUITER / CLIENT MODE =================== */
+// Reshapes the hero CTA + adds a short note based on visitor-declared (or referrer-
+// suggested) intent. Persisted in localStorage so it sticks across a return visit.
+const SUGGESTED_MODE=@json($suggestedMode);
+const MODE_RECRUITER_NOTE=@json($settings['mode_recruiter_note']);
+const MODE_CLIENT_NOTE=@json($settings['mode_client_note']);
+const MODE_RECRUITER_CTA=@json($settings['mode_recruiter_cta']);
+const MODE_CLIENT_CTA=@json($settings['mode_client_cta']);
+let visitorMode=null;
+(function(){
+  const promptBox=document.getElementById('modePrompt');
+  if(!promptBox)return;
+  const note=document.getElementById('modeNote');
+  const switchBtn=document.getElementById('modeSwitch');
+  const dismissBtn=document.getElementById('modeDismiss');
+  const primaryCta=document.getElementById('heroPrimaryCta');
+  const stored=localStorage.getItem('visitorMode');
+
+  // A suggested mode only gets a subtle highlight on its button — it never
+  // reshapes anything until the visitor actually confirms it with a tap.
+  if(SUGGESTED_MODE&&!stored){
+    const hint=promptBox.querySelector(`.mode-btn[data-mode="${SUGGESTED_MODE}"]`);
+    if(hint){hint.style.borderColor='var(--cyan)';hint.style.boxShadow='0 0 0 1px var(--cyan) inset';}
+  }
+
+  // Visibility is handled separately from applyMode() (which only ever touches the
+  // CTA/note) — otherwise a leftover GSAP-set inline opacity from any future reveal
+  // animation on this element could silently outrank the CSS .hide class again.
+  let hideTimer=null;
+  function hidePrompt(animate){
+    promptBox.classList.add('hide');
+    clearTimeout(hideTimer);
+    if(animate){hideTimer=setTimeout(()=>{promptBox.style.display='none';},400);}
+    else{promptBox.style.display='none';}
+  }
+  function showPrompt(){
+    clearTimeout(hideTimer);
+    promptBox.style.display='';
+    void promptBox.offsetWidth;   // force reflow so removing .hide actually transitions in
+    promptBox.classList.remove('hide');
+  }
+
+  function applyMode(mode){
+    visitorMode=mode;
+    if(primaryCta){
+      if(mode==='recruiter'){primaryCta.href='#logs';primaryCta.textContent=MODE_RECRUITER_CTA;}
+      else if(mode==='client'){primaryCta.href='#projects';primaryCta.textContent=MODE_CLIENT_CTA;}
+      else{primaryCta.href=primaryCta.dataset.defaultHref;primaryCta.textContent=primaryCta.dataset.defaultLabel;}
+    }
+    if(note){
+      const html=mode==='recruiter'?MODE_RECRUITER_NOTE:mode==='client'?MODE_CLIENT_NOTE:'';
+      note.innerHTML=html;
+      note.classList.toggle('show',!!html);
+    }
+  }
+
+  promptBox.querySelectorAll('.mode-btn').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const mode=b.dataset.mode;
+      localStorage.setItem('visitorMode',mode);
+      applyMode(mode);
+      hidePrompt(true);
+      if(switchBtn)switchBtn.classList.add('show');
+      trackEvent('mode_'+mode+'_selected');
+      botFreeSay(mode==='recruiter'
+        ? "Got it — jumping straight to what recruiters usually want to see first. 🎯"
+        : "Got it — here's a look at what he's built. 🛠️");
+    });
+  });
+
+  if(dismissBtn)dismissBtn.addEventListener('click',()=>{
+    hidePrompt(true);
+    localStorage.setItem('visitorMode','dismissed');
+  });
+
+  if(switchBtn)switchBtn.addEventListener('click',()=>{
+    localStorage.removeItem('visitorMode');
+    applyMode(null);
+    showPrompt();
+    switchBtn.classList.remove('show');
+  });
+
+  if(stored&&stored!=='dismissed'){
+    applyMode(stored);
+    hidePrompt(false);
+    if(switchBtn)switchBtn.classList.add('show');
+  }else if(stored==='dismissed'){
+    hidePrompt(false);
+  }
+})();
 
 /* ambient floating particles + drifting rocket/gear icons behind the intro */
 (function(){
@@ -1426,6 +1594,9 @@ function holoTalkStop(){
   $introScript = [];
   foreach ($greetings as $g) {
     $introScript[] = ['t' => $g, 'd' => 1450];
+  }
+  if (! empty($referrerGreeting)) {
+    $introScript[] = ['t' => $referrerGreeting, 'd' => 1450];
   }
   $introScript[] = ['t' => $introGuide, 'wave' => true, 'd' => 1450];
   $introScript[] = ['t' => $introPitch, 'd' => 2100];
@@ -1743,10 +1914,12 @@ addEventListener('scroll',onScrollUpdate,{passive:true});onScrollUpdate();
 // finish last "won" — making voice playback feel random. Debouncing the
 // voice trigger (HUD/waypoint highlight still update instantly) means we
 // only speak once the scroll position has actually settled on a section.
-let botSayTimer=null;
+let botSayTimer=null,viewedProjectsTracked=false;
 const io=new IntersectionObserver(entries=>{
   entries.forEach(en=>{
     if(!en.isIntersecting)return;
+    // lead-signal: visiting the projects section once is enough of a "view" for hot-lead flagging
+    if(!viewedProjectsTracked&&en.target.id==='projects'){viewedProjectsTracked=true;trackEvent('view_projects');}
     const idx=sectors.indexOf(en.target);if(idx<0)return;
     wps.forEach((w,i)=>w.classList.toggle('active',i===idx));
     hudSector.textContent=sectorNames[idx];
@@ -1871,6 +2044,7 @@ document.querySelectorAll('[data-ach]').forEach((b,i)=>{
 const bot=document.getElementById('bot'),bubble=document.getElementById('bubble');
 const pupils=document.getElementById('pupils');
 const SAY=@json(array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $settings['assistant_lines'])))));
+const NUDGE_LINE=@json($settings['assistant_nudge']);
 let lastSaid=-1,bubbleTimer=null,botVisible=false,idleTimer=null,suppressBotSay=false;
 function botShow(instant){
   botVisible=true;
@@ -1975,6 +2149,7 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
     stopSpeak();
     clearFocus();
     suppressBotSay=false;
+    if(jdPanel){jdPanel.hidden=true;log.style.display='';}
   }
   closeBtn.addEventListener('click',closePanel);
   toggleBtn.addEventListener('click',openPanel);
@@ -2018,6 +2193,83 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
     log.scrollTop=log.scrollHeight;
   }
 
+  /* ---- JD matcher — a recruiter pastes a job description, gets a real fit score
+     grounded in the actual skills/experience data (see AssistantController::match) ---- */
+  const MATCH_URL=@json(route('assistant.match'));
+  const jdToggle=document.getElementById('jdMatchToggle');
+  const jdPanel=document.getElementById('jdMatchPanel');
+  const jdInput=document.getElementById('jdMatchInput');
+  const jdSubmit=document.getElementById('jdMatchSubmit');
+  const jdCancel=document.getElementById('jdMatchCancel');
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function addFitCard(data){
+    const band=data.fitScore>=70?'high':data.fitScore>=40?'mid':'low';
+    const matchedHtml=data.matched.map(m=>'<span class="fit-chip match">✓ '+escapeHtml(m)+'</span>').join('');
+    const gapsHtml=data.gaps.length
+      ? data.gaps.map(g=>'<span class="fit-chip gap">△ '+escapeHtml(g)+'</span>').join('')
+      : '<span style="color:var(--faint);font-size:11px">No notable gaps found.</span>';
+    const div=document.createElement('div');
+    div.className='fit-card';
+    div.innerHTML=
+      '<div class="fit-score-row"><div class="fit-score '+band+'">'+data.fitScore+'%</div>'
+      +'<div class="fit-verdict">'+escapeHtml(data.verdict)+'</div></div>'
+      +(data.matched.length?'<div class="fit-group"><b>Matched</b>'+matchedHtml+'</div>':'')
+      +'<div class="fit-group"><b>Gaps</b>'+gapsHtml+'</div>';
+    log.appendChild(div);
+    log.scrollTop=log.scrollHeight;
+  }
+
+  if(jdToggle&&jdPanel){
+    jdToggle.addEventListener('click',()=>{
+      hideSuggestions();
+      log.style.display='none';
+      jdPanel.hidden=false;
+      jdInput.focus();
+    });
+    if(jdCancel)jdCancel.addEventListener('click',()=>{
+      jdPanel.hidden=true;
+      log.style.display='';
+      showSuggestions();
+    });
+    if(jdSubmit)jdSubmit.addEventListener('click',async()=>{
+      const jd=jdInput.value.trim();
+      if(jd.length<20){jdInput.focus();return;}
+      jdSubmit.disabled=true;
+      const originalLabel=jdSubmit.textContent;
+      jdSubmit.textContent='Analyzing…';
+      try{
+        const res=await fetch(MATCH_URL,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Accept':'application/json',
+            'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
+          body:JSON.stringify({jd})
+        });
+        const data=await res.json();
+        jdPanel.hidden=true;
+        log.style.display='';
+        if(data.ok){
+          addFitCard(data);
+          trackEvent('jd_match_run');
+          if(data.spoken)speak(data.spoken,{bot:true});
+        }else{
+          addMsg('assistant',data.message||"Couldn't analyze that — try again.");
+        }
+        jdInput.value='';
+      }catch(err){
+        jdPanel.hidden=true;
+        log.style.display='';
+        addMsg('assistant',"Signal interference — couldn't analyze that right now.");
+      }finally{
+        jdSubmit.disabled=false;
+        jdSubmit.textContent=originalLabel;
+      }
+    });
+  }
+
   bot.addEventListener('click',()=>{
     botCelebrate();
     if(panel.classList.contains('show'))closePanel();else openPanel();
@@ -2037,7 +2289,7 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
         method:'POST',
         headers:{'Content-Type':'application/json','Accept':'application/json',
           'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
-        body:JSON.stringify({question,history:chatHistory.slice(-8)}),
+        body:JSON.stringify({question,history:chatHistory.slice(-8),mode:visitorMode}),
         signal:currentAbort.signal
       });
       if(!panel.classList.contains('show'))return;   // closed while waiting — drop the response
@@ -2077,6 +2329,85 @@ document.getElementById('cName').addEventListener('focus',()=>botFreeSay(@json($
       }
     }
   });
+
+  /* ---- proactive lead-capture nudge ----
+     Fires at most once per visit, and never once the visitor has actually
+     sent a message. Two triggers: dwelling on the Contact section without
+     submitting, or exit intent (mouse heading for the tab/close bar). */
+  const NUDGE_DWELL_MS=9000;
+  const HOVER_DWELL_MS=2500;   // shorter bar — just "lingered", for hot-lead flagging, not the nudge itself
+  let nudgeShown=sessionStorage.getItem('leadNudgeShown')==='1';
+  let dwellTimer=null,hoverTimer=null,contactHoverTracked=false;
+
+  const contactSection=document.getElementById('contact');
+  if(contactSection){
+    new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        clearTimeout(dwellTimer);
+        clearTimeout(hoverTimer);
+        if(en.isIntersecting){
+          dwellTimer=setTimeout(()=>fireNudge(),NUDGE_DWELL_MS);
+          if(!contactHoverTracked)hoverTimer=setTimeout(()=>{contactHoverTracked=true;trackEvent('contact_hover');},HOVER_DWELL_MS);
+        }
+      });
+    },{threshold:.4}).observe(contactSection);
+  }
+
+  if(fine&&!reduced){
+    document.addEventListener('mouseout',e=>{
+      if(!nudgeShown&&!contactSent&&!e.relatedTarget&&e.clientY<=0&&scrollY>400)fireNudge();
+    });
+  }
+
+  function fireNudge(){
+    if(nudgeShown||contactSent||panel.classList.contains('show'))return;
+    nudgeShown=true;
+    sessionStorage.setItem('leadNudgeShown','1');
+    trackEvent('nudge_shown');
+
+    panel.classList.add('show');
+    toggleBtn.classList.add('hide');
+    document.body.classList.add('chat-open');
+    addMsg('assistant',NUDGE_LINE.replace(/<[^>]+>/g,''));
+    speak(NUDGE_LINE.replace(/<[^>]+>/g,''),{bot:true});
+    showNudgeActions();
+  }
+
+  function showNudgeActions(){
+    const say=(text)=>{addMsg('assistant',text);speak(text,{bot:true});};
+    const actions=[
+      ['📧 Email me the resume',()=>{
+        addMsg('user','Email me the resume');
+        hideSuggestions();
+        trackEvent('nudge_resume_click');
+        document.getElementById('resumeBtn')?.click();
+        say('Sent your way — check your downloads. 📄');
+      }],
+      ['📞 Set up a quick call',()=>{
+        addMsg('user','Set up a quick call');
+        hideSuggestions();
+        trackEvent('nudge_call_click');
+        const tel=document.getElementById('whatsappBtn')?.dataset.tel;
+        if(tel){window.location.href='tel:'+tel;say('Calling now — talk soon! 📞');}
+        else{document.getElementById('cName')?.focus();say("Drop your details in the form below and I'll get you scheduled. 📞");}
+      }],
+      ['No thanks, just browsing',()=>{
+        addMsg('user','No thanks, just browsing');
+        hideSuggestions();
+        trackEvent('nudge_dismissed');
+        say("All good — I'm right here if you change your mind. 🙂");
+        setTimeout(showSuggestions,600);
+      }],
+    ];
+    suggestBox.innerHTML='';
+    actions.forEach(([label,fn])=>{
+      const b=document.createElement('button');
+      b.type='button';b.className='chip';b.textContent=label;
+      b.addEventListener('click',fn);
+      suggestBox.appendChild(b);
+    });
+    suggestBox.classList.remove('hide');
+  }
 })();
 
 /* resume */
@@ -2087,23 +2418,20 @@ document.getElementById('resumeBtn').addEventListener('click',function(e){
 
 /* conversion tracking — fire-and-forget, never blocks the click */
 document.querySelectorAll('[data-track]').forEach(el=>{
-  el.addEventListener('click',()=>{
-    fetch(INTERACTIONS_URL,{
-      method:'POST',keepalive:true,
-      headers:{'Content-Type':'application/json','Accept':'application/json',
-        'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
-      body:JSON.stringify({type:el.dataset.track})
-    }).catch(()=>{});
-  });
+  el.addEventListener('click',()=>trackEvent(el.dataset.track));
 });
 
 /* contact */
 const form=document.getElementById('cmdForm');
 const complete=document.getElementById('complete');
+const completeText=document.getElementById('completeText');
+const COMPLETE_TEXT_BASE=@json($settings['complete_text']);
 form.addEventListener('submit',async e=>{
   e.preventDefault();
   if(!form.checkValidity()){form.reportValidity();return;}
   const btn=form.querySelector('.launch');
+  if(btn.classList.contains('loading'))return;   // already in flight — ignore a second Enter/click
+  btn.classList.add('loading');
   try{
     const res=await fetch(CONTACT_URL,{
       method:'POST',
@@ -2112,12 +2440,17 @@ form.addEventListener('submit',async e=>{
       body:JSON.stringify({name:form.name.value,email:form.email.value,message:form.message.value,hp_check:form.hp_check.value})
     });
     if(!res.ok)throw 0;
+    contactSent=true;
     btn.classList.add('sent');
+    // confirm the exact address it'll go to — reassures the visitor and surfaces a typo before it's too late
+    completeText.textContent=COMPLETE_TEXT_BASE+' Return frequency confirmed: '+form.email.value.trim()+'.';
     burstAt(innerWidth/2,innerHeight/2,['#54F0A8','#3DE8FF','#FFC56E','#9D6BFF'],90);
     botCelebrate();
     setTimeout(()=>complete.classList.add('show'),700);
   }catch(err){
     botFreeSay("Transmission failed — signal interference. Please try again, commander. 📡");
+  }finally{
+    btn.classList.remove('loading');
   }
 });
 document.getElementById('completeClose').addEventListener('click',()=>{

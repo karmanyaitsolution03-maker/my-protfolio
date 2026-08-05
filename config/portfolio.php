@@ -83,6 +83,16 @@ return [
             . "<b>SUPPORT</b> Debugging and deployment", 'area'],
     ],
 
+    'Visitor mode (recruiter/client toggle)' => [
+        'mode_question'         => ['Prompt question shown near the hero CTAs', 'Are you hiring, or looking to build something?', 'text'],
+        'mode_recruiter_label'  => ['Recruiter button label', "🎯 I'm hiring", 'text'],
+        'mode_client_label'     => ['Client button label', '🛠️ Building something', 'text'],
+        'mode_recruiter_note'   => ['Note shown after "hiring" is picked (HTML)', 'Here for a role? <b>Experience</b> and the <b>resume</b> are right below.', 'area'],
+        'mode_client_note'      => ['Note shown after "building" is picked (HTML)', 'Here to build something? Take a look at <b>recent projects</b>.', 'area'],
+        'mode_recruiter_cta'    => ['Secondary hero button — recruiter mode', 'VIEW EXPERIENCE', 'text'],
+        'mode_client_cta'       => ['Secondary hero button — client mode', 'VIEW PROJECTS', 'text'],
+    ],
+
     'Section · Profile' => [
         'profile_tag'          => ['Tag', 'MODULE 01 · AI PROFILE REPORT', 'text'],
         'profile_title'        => ['Title', 'Profile overview:', 'text'],
@@ -192,6 +202,8 @@ return [
             . "Show me his projects\n"
             . "Is he available for freelance work?\n"
             . "How can I contact him?", 'area'],
+        'assistant_nudge' => ['Proactive lead-capture nudge (HTML) — shown once per visit if a visitor lingers on the Contact section, or shows exit intent, without sending a message',
+            "Still thinking it over, commander? I can email you the resume or set up a quick call right now — just say the word. 📡", 'area'],
     ],
 
 ];

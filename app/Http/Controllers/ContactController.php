@@ -30,13 +30,17 @@ class ContactController extends Controller
 
         $message = Message::create($data);
 
-        $triage = app(MessageTriageService::class)->triage($data['name'], $data['email'], $data['message']);
-        if ($triage) {
-            $message->update(['ai_category' => $triage['category'], 'ai_summary' => $triage['summary']]);
-        }
-
         $settings = Setting::resolved();
         $settings['name'] = trim(($settings['first_name'] ?? '') . ' ' . ($settings['last_name'] ?? ''));
+
+        $triage = app(MessageTriageService::class)->triage($data['name'], $data['email'], $data['message'], $settings);
+        if ($triage) {
+            $message->update([
+                'ai_category'    => $triage['category'],
+                'ai_summary'     => $triage['summary'],
+                'ai_reply_draft' => $triage['reply'] !== '' ? $triage['reply'] : null,
+            ]);
+        }
 
         $notifyAddress = $settings['email'] ?? config('mail.from.address');
 

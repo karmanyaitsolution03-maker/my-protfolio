@@ -39,4 +39,8 @@ return [
         'key' => env('OPENAI_API_KEY'),
     ],
 
+    'ipinfo' => [
+        'token' => env('IPINFO_TOKEN'),
+    ],
+
 ];

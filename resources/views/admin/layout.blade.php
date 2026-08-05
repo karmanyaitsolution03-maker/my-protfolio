@@ -102,6 +102,16 @@ textarea{min-height:90px;resize:vertical}
 .stat:hover{border-color:rgba(61,232,255,.4);transform:translateY(-2px)}
 .stat b{font-size:28px;color:var(--cyan);font-family:ui-monospace,monospace}
 .stat span{display:block;color:var(--muted);font-size:12px;margin-top:5px;letter-spacing:.03em}
+/* ---------- funnel ---------- */
+.funnel{display:flex;flex-direction:column;gap:16px}
+.funnel-row .funnel-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;gap:10px}
+.funnel-row .funnel-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.funnel-row .funnel-value{font-family:ui-monospace,monospace;font-size:15px;font-weight:700;color:var(--text);white-space:nowrap}
+.funnel-track{height:22px;border-radius:4px;background:rgba(61,232,255,.08)}
+.funnel-fill{height:100%;border-radius:0 4px 4px 0;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .3s ease}
+.funnel-sub{margin-top:6px;font-size:11.5px;color:var(--muted)}
+.funnel-sub .drop{color:var(--rose);font-weight:600}
+.funnel-callout{margin-top:16px;padding:11px 15px;border-radius:10px;background:rgba(255,107,157,.08);border:1px solid rgba(255,107,157,.3);color:var(--rose);font-size:13px;display:flex;gap:9px;align-items:center}
 .actions{white-space:nowrap}
 small.hint{color:var(--muted)}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}

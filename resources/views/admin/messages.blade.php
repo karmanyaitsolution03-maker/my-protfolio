@@ -47,6 +47,28 @@
       </form>
     </td>
   </tr>
+  <tr>
+    <td colspan="6" style="padding:0 12px 16px;border-bottom:1px solid var(--line)">
+      <details {{ $m->ai_reply_draft && ! $m->replied_at ? 'open' : '' }} style="background:rgba(61,232,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 14px">
+        <summary style="cursor:pointer;font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:.06em;text-transform:uppercase">
+          ✉️ {{ $m->ai_reply_draft ? 'AI-drafted reply' : 'Write a reply' }}
+          @if($m->replied_at)
+            <span class="hint" style="text-transform:none;font-weight:400;letter-spacing:0"> — sent {{ $m->replied_at->diffForHumans() }}</span>
+          @elseif(! $m->ai_reply_draft)
+            <span class="hint" style="text-transform:none;font-weight:400;letter-spacing:0"> — marked "{{ $m->ai_category ?? 'uncategorized' }}", no AI draft — write your own</span>
+          @endif
+        </summary>
+        <form method="POST" action="{{ route('admin.messages.reply', $m) }}" style="margin-top:10px">
+          @csrf
+          <textarea name="reply" rows="5" style="width:100%" placeholder="Write your reply to {{ $m->name }}…">{{ $m->ai_reply_draft }}</textarea>
+          <div style="display:flex;gap:12px;margin-top:8px;align-items:center;flex-wrap:wrap">
+            <button class="btn primary" type="submit">{{ $m->replied_at ? 'Send again' : 'Send reply' }}</button>
+            <small class="hint">Edit before sending if you like — goes out as you, replies land in your inbox.</small>
+          </div>
+        </form>
+      </details>
+    </td>
+  </tr>
   @empty
   <tr><td colspan="6"><small class="hint">No messages yet.</small></td></tr>
   @endforelse
